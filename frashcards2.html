@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社会保障制度 + 民法 フラッシュカード — 家庭基礎</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   Design tokens
+══════════════════════════════════════ */
+:root {
+  --color-bg:             #fafaf8;
+  --color-surface:        #ffffff;
+  --color-border:         #e8e8e5;
+  --color-text-primary:   #1a1a1a;
+  --color-text-secondary: #6b6b6b;
+  --color-accent:         #2d6a4f;
+  --color-accent-light:   #e8f5e9;
+
+  --color-knew:      #2d6a4f;
+  --color-knew-bg:   rgba(45,106,79,0.07);
+  --color-unsure:    #b7800a;
+  --color-unsure-bg: rgba(183,128,10,0.07);
+  --color-forgot:    #c0392b;
+  --color-forgot-bg: rgba(192,57,43,0.07);
+
+  --font-sans:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-display: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.05);
+  --shadow-overlay: 0 16px 48px rgba(0,0,0,0.16);
+
+  --header-h: 52px;
+  --swap-out: 130ms;
+  --swap-in:  170ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "pkna";
+  -webkit-font-smoothing: antialiased;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+kbd {
+  display: inline-block;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h);
+  background: rgba(255,255,255,0.92);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-inner {
+  max-width: 800px; margin: 0 auto;
+  height: 100%; padding: 0 1.25rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+}
+.header-left  { display: flex; align-items: baseline; gap: 0.5rem; min-width: 0; }
+.header-title {
+  font-family: var(--font-display); font-size: 0.95rem; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.header-sub {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--color-text-secondary); white-space: nowrap;
+}
+.header-right { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+
+.btn-icon {
+  padding: 0.28rem 0.75rem; border-radius: 100px;
+  border: 1px solid var(--color-border); background: var(--color-surface);
+  font-family: var(--font-mono); font-size: 0.74rem;
+  color: var(--color-text-secondary); cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-icon:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.btn-icon.active {
+  background: var(--color-accent-light);
+  border-color: var(--color-accent); color: var(--color-accent);
+}
+
+/* ══════════════════════════════════════
+   START OVERLAY
+══════════════════════════════════════ */
+.start-overlay {
+  position: fixed;
+  top: var(--header-h); left: 0; right: 0; bottom: 0;
+  z-index: 90;
+  background: rgba(250,250,248,0.97);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  overflow-y: auto;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 2rem 1.25rem 3rem; gap: 1.5rem;
+}
+.start-overlay.hidden { display: none; }
+
+.start-hero { text-align: center; padding-top: 1rem; }
+.start-hero__label {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-accent); margin-bottom: 0.5rem;
+}
+.start-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 700;
+  color: var(--color-text-primary); letter-spacing: -0.01em; line-height: 1.2;
+}
+.start-hero__divider {
+  width: 48px; height: 2px; margin: 1rem auto 0;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+}
+
+.start-card {
+  width: min(560px, 100%);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-overlay);
+  padding: 1.75rem;
+}
+.start-card__title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem; }
+.start-card__desc  { font-size: 0.82rem; color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+
+.start-block { margin-bottom: 1rem; }
+.start-label {
+  display: block; font-family: var(--font-mono);
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-text-secondary); margin-bottom: 0.5rem;
+}
+.start-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.start-cat {
+  padding: 0.4rem 0.9rem; border-radius: 100px;
+  border: 1px solid var(--color-border); background: var(--color-bg);
+  font-size: 0.82rem; color: var(--color-text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.start-cat:hover  { border-color: var(--color-accent); color: var(--color-accent); }
+.start-cat.active { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+
+.start-count {
+  width: 100%; padding: 0.55rem 0.75rem;
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  font-family: var(--font-sans); font-size: 0.9rem;
+  background: var(--color-bg); color: var(--color-text-primary);
+  appearance: none; cursor: pointer; outline: none; transition: border-color 0.15s;
+}
+.start-count:focus { border-color: var(--color-accent); }
+
+.start-meta {
+  font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-accent);
+  margin-bottom: 1.1rem; min-height: 1.2em;
+}
+
+/* ══════════════════════════════════════
+   STUDY MODE
+══════════════════════════════════════ */
+.mode-panel { padding-top: var(--header-h); min-height: 100vh; }
+
+.study-area {
+  padding: 1rem 1.25rem 3rem;
+  max-width: 640px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+
+.progress-strip {
+  width: 100%; height: 3px;
+  background: var(--color-border); border-radius: 100px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, var(--color-accent), #52b788);
+  border-radius: 100px; transition: width 0.35s ease;
+}
+
+.deck-nav-row {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+}
+.deck-center { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.deck-indicator { font-family: var(--font-mono); font-size: 0.82rem; color: var(--color-text-secondary); }
+.mastery-dots { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; min-height: 8px; }
+.m-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--color-border); transition: background 0.2s; flex-shrink: 0;
+}
+.m-dot.knew   { background: var(--color-knew); }
+.m-dot.unsure { background: var(--color-unsure); }
+.m-dot.forgot { background: var(--color-forgot); }
+.m-dot.current { background: var(--color-text-primary); box-shadow: 0 0 0 2px rgba(26,26,26,0.18); }
+
+.nav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--color-border); background: var(--color-surface);
+  font-size: 1.3rem; color: var(--color-text-secondary);
+  cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-card);
+}
+.nav-btn:hover    { background: var(--color-accent); color: white; border-color: var(--color-accent); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+/* ── Flip card ── */
+.card-scene {
+  width: 100%; aspect-ratio: 16 / 9;
+  perspective: 1200px; cursor: pointer; user-select: none;
+}
+.card-scene.swap-out-left  { animation: swapOutLeft  var(--swap-out) ease forwards; }
+.card-scene.swap-out-right { animation: swapOutRight var(--swap-out) ease forwards; }
+.card-scene.swap-in-right  { animation: swapInRight  var(--swap-in)  ease forwards; }
+.card-scene.swap-in-left   { animation: swapInLeft   var(--swap-in)  ease forwards; }
+.card-scene.is-swapping    { pointer-events: none; }
+
+@keyframes swapOutLeft  { from{opacity:1;transform:translateX(0) scale(1)}        to{opacity:0;transform:translateX(-20px) scale(0.97)} }
+@keyframes swapOutRight { from{opacity:1;transform:translateX(0) scale(1)}        to{opacity:0;transform:translateX(20px) scale(0.97)}  }
+@keyframes swapInRight  { from{opacity:0;transform:translateX(20px) scale(0.97)}  to{opacity:1;transform:translateX(0) scale(1)}        }
+@keyframes swapInLeft   { from{opacity:0;transform:translateX(-20px) scale(0.97)} to{opacity:1;transform:translateX(0) scale(1)}        }
+
+.card-body {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.52s cubic-bezier(0.4,0.2,0.2,1);
+  border-radius: var(--radius-md);
+}
+.card-body.no-transition { transition: none !important; }
+.card-body.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  border-radius: var(--radius-md); box-shadow: var(--shadow-card); overflow: hidden;
+}
+.card-face-inner {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 1.25rem 1.75rem; position: relative; text-align: center;
+}
+
+.card-front {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.card-front::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--color-accent), #52b788);
+}
+.card-back {
+  transform: rotateY(180deg);
+  background: var(--card-back-color, var(--color-accent)); color: white;
+}
+.card-back::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: rgba(255,255,255,0.3);
+}
+.card-back::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08), transparent 55%),
+    radial-gradient(circle at 80% 15%, rgba(255,255,255,0.05), transparent 50%);
+}
+
+.face-top {
+  position: absolute; top: 0.65rem; left: 1rem; right: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.face-badge {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 500;
+}
+/* type tag inline */
+.type-pip {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  padding: 0.1rem 0.45rem; border-radius: 100px;
+  margin-left: 0.3rem; vertical-align: middle;
+  font-weight: 600;
+}
+.type-pip.name   { background: #e8f5e9; color: #2d6a4f; }
+.type-pip.detail { background: #fef3c7; color: #b45309; }
+.type-pip.ox     { background: #f3e8ff; color: #7c3aed; }
+.back-badge { background: rgba(255,255,255,0.18) !important; color: rgba(255,255,255,0.85) !important; }
+.face-hint { margin-left: auto; font-size: 0.65rem; color: var(--color-text-secondary); white-space: nowrap; }
+
+.card-question {
+  font-size: clamp(0.9rem, 2.4vw, 1.15rem);
+  font-family: var(--font-display); font-weight: 700;
+  line-height: 1.7; color: var(--color-text-primary);
+  white-space: pre-line; max-height: 55%; overflow-y: auto;
+}
+.card-answer {
+  font-size: clamp(1rem, 2.8vw, 1.35rem);
+  font-family: var(--font-display); font-weight: 700;
+  line-height: 1.55; color: white; white-space: pre-line; margin-bottom: 0.5rem;
+}
+.card-sub {
+  font-size: clamp(0.7rem, 1.6vw, 0.82rem);
+  color: rgba(255,255,255,0.78); line-height: 1.65;
+  white-space: pre-line; max-height: 30%; overflow-y: auto;
+}
+.card-watermark {
+  position: absolute; bottom: 0.6rem; right: 0.9rem;
+  font-size: 0.58rem; letter-spacing: 0.3em;
+  color: rgba(26,26,26,0.07); pointer-events: none;
+}
+.back-wm { color: rgba(255,255,255,0.1); }
+
+/* ── Mastery ── */
+.mastery-row { display: flex; gap: 0.6rem; width: 100%; }
+.mastery-btn {
+  flex: 1; padding: 0.65rem 0.5rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border); background: var(--color-surface);
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  opacity: 0.3; pointer-events: none; transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.2s, background 0.15s;
+}
+.mastery-btn.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+.m-icon  { font-size: 1.1rem; line-height: 1; }
+.m-label { font-size: 0.68rem; color: var(--color-text-secondary); }
+
+.m-forgot { border-color: rgba(192,57,43,0.2); }
+.m-forgot .m-icon { color: var(--color-forgot); }
+.m-forgot.active:hover { background: var(--color-forgot); border-color: var(--color-forgot); }
+.m-forgot.active:hover .m-icon, .m-forgot.active:hover .m-label { color: white; }
+
+.m-unsure { border-color: rgba(183,128,10,0.2); }
+.m-unsure .m-icon { color: var(--color-unsure); }
+.m-unsure.active:hover { background: var(--color-unsure); border-color: var(--color-unsure); }
+.m-unsure.active:hover .m-icon, .m-unsure.active:hover .m-label { color: white; }
+
+.m-knew { border-color: rgba(45,106,79,0.2); }
+.m-knew .m-icon { color: var(--color-knew); }
+.m-knew.active:hover { background: var(--color-knew); border-color: var(--color-knew); }
+.m-knew.active:hover .m-icon, .m-knew.active:hover .m-label { color: white; }
+
+.kb-hint { font-size: 0.68rem; color: var(--color-text-secondary); text-align: center; line-height: 1.8; }
+
+/* ══════════════════════════════════════
+   COMPLETE OVERLAY
+══════════════════════════════════════ */
+.complete-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(250,250,248,0.9);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; padding: 1.25rem;
+}
+.complete-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-overlay);
+  padding: 2.5rem 2rem; max-width: 420px; width: 100%;
+  text-align: center; position: relative; overflow: hidden;
+}
+.complete-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--color-knew), var(--color-accent), var(--color-unsure));
+}
+.complete-icon  { font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--color-accent); }
+.complete-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+.complete-stats { display: flex; gap: 0.6rem; justify-content: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.stat-pill {
+  padding: 0.65rem 1rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  display: flex; flex-direction: column; align-items: center; gap: 0.15rem; min-width: 72px;
+}
+.stat-pill .sp-n { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; line-height: 1; }
+.stat-pill .sp-l { font-size: 0.65rem; color: var(--color-text-secondary); }
+.stat-pill.sp-knew   { background: var(--color-knew-bg);   border-color: rgba(45,106,79,0.25); }
+.stat-pill.sp-knew   .sp-n { color: var(--color-knew); }
+.stat-pill.sp-unsure { background: var(--color-unsure-bg); border-color: rgba(183,128,10,0.25); }
+.stat-pill.sp-unsure .sp-n { color: var(--color-unsure); }
+.stat-pill.sp-forgot { background: var(--color-forgot-bg); border-color: rgba(192,57,43,0.25); }
+.stat-pill.sp-forgot .sp-n { color: var(--color-forgot); }
+
+.complete-breakdown {
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 1.5rem; text-align: left;
+}
+.breakdown-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.5rem 0.85rem; border-bottom: 1px solid var(--color-border); font-size: 0.8rem;
+}
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-label { flex: 1; color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.breakdown-bar-wrap { width: 72px; height: 5px; background: var(--color-border); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
+.breakdown-bar { height: 100%; background: var(--color-accent); border-radius: 100px; transition: width 0.5s ease; }
+.breakdown-num { font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); font-weight: 600; min-width: 32px; text-align: right; }
+
+.complete-actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+
+/* ══════════════════════════════════════
+   SIDE LIST
+══════════════════════════════════════ */
+.list-toggle {
+  position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+  background: var(--color-accent); color: white;
+  padding: 0.85rem 0.4rem; border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  cursor: pointer; z-index: 80;
+  writing-mode: vertical-lr; font-size: 0.7rem; letter-spacing: 0.15em;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  transition: background 0.15s;
+}
+.list-toggle:hover { background: #235e44; }
+#listArrow { writing-mode: horizontal-tb; font-size: 1rem; line-height: 1; }
+
+.list-panel {
+  position: fixed; right: -260px; top: 0; bottom: 0; width: 240px;
+  background: var(--color-surface); border-left: 1px solid var(--color-border);
+  z-index: 85; transition: right 0.24s ease; overflow-y: auto;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.07);
+}
+.list-panel.open { right: 0; }
+.list-head {
+  position: sticky; top: 0;
+  padding: calc(var(--header-h) + 0.5rem) 1rem 0.75rem;
+  background: var(--color-bg); border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);
+}
+.list-close {
+  background: none; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  padding: 0.2rem 0.6rem; font-size: 0.68rem; color: var(--color-text-secondary); cursor: pointer;
+  transition: background 0.13s;
+}
+.list-close:hover { background: var(--color-border); }
+.list-body { padding: 0.4rem; display: flex; flex-direction: column; gap: 2px; }
+.list-item {
+  padding: 0.5rem 0.65rem; border-radius: var(--radius-sm); cursor: pointer;
+  font-size: 0.78rem; line-height: 1.45;
+  display: flex; align-items: flex-start; gap: 0.5rem;
+  border: 1px solid transparent; transition: background 0.12s;
+  color: var(--color-text-primary);
+}
+.list-item:hover { background: var(--color-bg); }
+.list-item.current { background: var(--color-accent-light); border-color: rgba(45,106,79,0.3); }
+.li-n { font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-text-secondary); min-width: 18px; margin-top: 2px; }
+.li-d { width: 7px; height: 7px; border-radius: 50%; background: var(--color-border); flex-shrink: 0; margin-top: 4px; }
+.li-d.knew   { background: var(--color-knew); }
+.li-d.unsure { background: var(--color-unsure); }
+.li-d.forgot { background: var(--color-forgot); }
+.li-t { flex: 1; }
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn-primary {
+  background: var(--color-accent); color: white; border: none;
+  border-radius: var(--radius-sm); padding: 0.7rem 1.75rem;
+  font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 8px rgba(45,106,79,0.28);
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btn-secondary {
+  background: transparent; color: var(--color-text-secondary);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  padding: 0.65rem 1.25rem;
+  font-family: var(--font-sans); font-size: 0.88rem; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--color-bg); color: var(--color-text-primary); }
+
+.start-btn { width: 100%; padding: 0.85rem; font-size: 0.95rem; letter-spacing: 0.05em; }
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--color-text-primary); color: white;
+  padding: 0.5rem 1.25rem; border-radius: 100px;
+  font-size: 0.8rem; z-index: 300;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s; white-space: nowrap;
+}
+.toast.visible { opacity: 1; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 520px) {
+  .card-scene  { aspect-ratio: 3/2; }
+  .mastery-btn { padding: 0.55rem 0.35rem; }
+  .m-label     { font-size: 0.62rem; }
+  .kb-hint     { display: none; }
+  .header-sub  { display: none; }
+  .complete-card { padding: 1.75rem 1.25rem; }
+  .btn-icon { padding: 0.28rem 0.5rem; font-size: 0.7rem; }
+  #shuffleLabel { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <span class="header-title">社会保障制度 + 民法</span>
+      <span class="header-sub">家庭基礎 期末対策</span>
+    </div>
+    <div class="header-right">
+      <button class="btn-icon" id="shuffleBtn" title="シャッフル on/off">
+        ⇄ <span id="shuffleLabel">shuffle</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- START OVERLAY -->
+<div class="start-overlay" id="startOverlay">
+  <div class="start-hero">
+    <p class="start-hero__label">家庭基礎 · Flashcards</p>
+    <h1 class="start-hero__title">社会保障制度 + 民法</h1>
+    <div class="start-hero__divider"></div>
+  </div>
+
+  <div class="start-card">
+    <h2 class="start-card__title">学習スタート</h2>
+    <p class="start-card__desc">カテゴリと問題数を選んでください</p>
+
+    <div class="start-block">
+      <span class="start-label">カテゴリ</span>
+      <div class="start-cats" id="startCats"></div>
+    </div>
+
+    <div class="start-block">
+      <span class="start-label">問題数</span>
+      <select id="startCount" class="start-count">
+        <option value="10">10問</option>
+        <option value="20" selected>20問</option>
+        <option value="30">30問</option>
+        <option value="all">全問</option>
+      </select>
+    </div>
+
+    <p class="start-meta" id="startMeta"></p>
+    <button class="btn-primary start-btn" onclick="startStudy()">スタート →</button>
+  </div>
+</div>
+
+<!-- STUDY MODE -->
+<div class="mode-panel" id="mode-study">
+  <div class="study-area">
+    <div class="progress-strip">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="deck-nav-row">
+      <button class="nav-btn" id="prevBtn" onclick="prevCard()" disabled>&#x2039;</button>
+      <div class="deck-center">
+        <span class="deck-indicator" id="deckIndicator">1 / --</span>
+        <div class="mastery-dots" id="masteryDots"></div>
+      </div>
+      <button class="nav-btn" id="nextBtn" onclick="nextCard()">&#x203A;</button>
+    </div>
+
+    <div class="card-scene" id="cardScene" onclick="flipCard()">
+      <div class="card-body" id="cardBody">
+        <div class="card-face card-front">
+          <div class="card-face-inner">
+            <div class="face-top">
+              <span class="face-badge" id="frontBadge"></span>
+              <span class="face-hint">タップ / <kbd>Space</kbd> で答えを確認</span>
+            </div>
+            <p class="card-question" id="cardQuestion"></p>
+            <span class="card-watermark">問</span>
+          </div>
+        </div>
+        <div class="card-face card-back" id="cardBack">
+          <div class="card-face-inner">
+            <div class="face-top">
+              <span class="face-badge back-badge" id="backBadge"></span>
+            </div>
+            <p class="card-answer" id="cardAnswer"></p>
+            <p class="card-sub"   id="cardSub"></p>
+            <span class="card-watermark back-wm">答</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mastery-row">
+      <button class="mastery-btn m-forgot" onclick="markCard('forgot')">
+        <span class="m-icon">✗</span><span class="m-label">わからない</span>
+      </button>
+      <button class="mastery-btn m-unsure" onclick="markCard('unsure')">
+        <span class="m-icon">△</span><span class="m-label">あやふや</span>
+      </button>
+      <button class="mastery-btn m-knew" onclick="markCard('knew')">
+        <span class="m-icon">✓</span><span class="m-label">わかった</span>
+      </button>
+    </div>
+
+    <p class="kb-hint">
+      <kbd>←</kbd><kbd>→</kbd> 移動 &nbsp;|&nbsp;
+      <kbd>Space</kbd> 裏返す &nbsp;|&nbsp;
+      <kbd>1</kbd>✗ <kbd>2</kbd>△ <kbd>3</kbd>✓
+    </p>
+  </div>
+</div>
+
+<!-- COMPLETE OVERLAY -->
+<div class="complete-overlay" id="completeOverlay" style="display:none">
+  <div class="complete-card">
+    <div class="complete-icon">◐</div>
+    <h2 class="complete-title">一周完了</h2>
+    <div class="complete-stats"     id="completeStats"></div>
+    <div class="complete-breakdown" id="completeBreakdown"></div>
+    <div class="complete-actions">
+      <button class="btn-secondary" onclick="reviewWeak()">✗ △ のみ復習</button>
+      <button class="btn-secondary" onclick="openStartScreen()">設定に戻る</button>
+      <button class="btn-primary"   onclick="restartDeck()">もう一度</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDE LIST -->
+<div class="list-toggle" id="listToggle" onclick="toggleList()">
+  <span>一覧</span>
+  <span id="listArrow">›</span>
+</div>
+<div class="list-panel" id="listPanel">
+  <div class="list-head">
+    <span>カード一覧</span>
+    <button class="list-close" onclick="toggleList()">閉じる</button>
+  </div>
+  <div class="list-body" id="listBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// カードデータ
+// cat: pension / medical / labor / livelihood / minpo
+// type: name / detail / ox
+// ══════════════════════════════════════════════
+const ALL_CARDS = [
+  // ─── 年金 ───────────────────────────────────
+  { cat:'pension', type:'name', label:'年金',
+    q:'20歳になった国民が高齢期のために加入する年金制度の名称は？',
+    a:'国民年金',
+    sub:'20歳以上の全国民が性別・年齢を問わず加入。\n保険料は月額17,510円（令和7年度）' },
+
+  { cat:'pension', type:'detail', label:'年金',
+    q:'老齢基礎年金を満額受け取るために必要な加入期間は？',
+    a:'40年（480ヶ月）',
+    sub:'25年以上の受給資格期間があれば受取可能。\n支給開始年齢は原則65歳' },
+
+  { cat:'pension', type:'detail', label:'年金',
+    q:'国民年金の保険料を払えない場合に使える制度は？',
+    a:'保険料免除制度・猶予制度',
+    sub:'所得が少ない場合などに申請できる。\n免除期間も受給資格期間にカウントされる' },
+
+  { cat:'pension', type:'name', label:'年金',
+    q:'会社員・公務員が国民年金に上乗せして加入する年金制度は？',
+    a:'厚生年金',
+    sub:'保険料は事業主と折半。\n給与に応じて保険料・受取額が変わる（報酬比例部分）' },
+
+  { cat:'pension', type:'detail', label:'年金',
+    q:'老齢基礎年金の年間満額受給額（令和6年度）は？',
+    a:'約81.6万円（月額約6.8万円）',
+    sub:'毎年度改定。物価・賃金スライドで変動する' },
+
+  { cat:'pension', type:'name', label:'年金',
+    q:'国民年金・厚生年金に上乗せできる私的年金の代表的なものは？',
+    a:'iDeCo（個人型確定拠出年金）・企業年金',
+    sub:'iDeCoは自分で掛金を拠出・運用し、\n老後に受け取る。掛金が全額所得控除になる' },
+
+  // ─── 医療・保健 ─────────────────────────────
+  { cat:'medical', type:'name', label:'医療・保健',
+    q:'日本が採用する「すべての国民が何らかの公的医療保険に加入する」仕組みの名称は？',
+    a:'国民皆保険制度',
+    sub:'1961年に達成。健康保険・国民健康保険などで構成' },
+
+  { cat:'medical', type:'detail', label:'医療・保健',
+    q:'一般の成人（70歳未満）が医療機関を受診した際の自己負担割合は？',
+    a:'3割',
+    sub:'義務教育就学前：2割 / 70〜74歳：2割 / 75歳〜：1割（現役並み所得者は3割）' },
+
+  { cat:'medical', type:'detail', label:'医療・保健',
+    q:'ひと月の医療費自己負担が一定額を超えた分を払い戻す制度は？',
+    a:'高額療養費制度',
+    sub:'上限額は所得区分によって異なる。\n入院前の「限度額適用認定証」提示で窓口負担を抑えられる' },
+
+  { cat:'medical', type:'name', label:'医療・保健',
+    q:'75歳以上（または65歳以上で一定の障害）の方が加入する医療保険は？',
+    a:'後期高齢者医療制度',
+    sub:'都道府県単位の広域連合が運営。\n自己負担は原則1割（現役並み所得者は3割）' },
+
+  { cat:'medical', type:'name', label:'医療・保健',
+    q:'会社員が加入する医療保険の名称は？',
+    a:'健康保険（被用者保険）',
+    sub:'全国健康保険協会（協会けんぽ）または組合健保。\n保険料は労使折半' },
+
+  { cat:'medical', type:'name', label:'医療・保健',
+    q:'自営業者・農業者・無職者などが加入する医療保険は？',
+    a:'国民健康保険（国保）',
+    sub:'市区町村が運営。\n保険料は所得・資産・世帯人数で決まる' },
+
+  // ─── 労働・育児 ─────────────────────────────
+  { cat:'labor', type:'name', label:'労働・育児',
+    q:'労働者が失業した際に生活を支援し再就職を促す保険制度は？',
+    a:'雇用保険（失業保険）',
+    sub:'給付の種類：基本手当（失業給付）・育児休業給付・教育訓練給付など' },
+
+  { cat:'labor', type:'detail', label:'労働・育児',
+    q:'育児休業中に支給される給付の名称と給付率は？',
+    a:'育児休業給付金 ／ 休業開始180日間は67%、以降は50%',
+    sub:'2025年4月〜：手取り10割相当に引き上げ予定（男性育休促進策）' },
+
+  { cat:'labor', type:'name', label:'労働・育児',
+    q:'子どもや家族の病気・けがの看護・介護のために取得できる休暇制度は？',
+    a:'看護休暇・介護休暇',
+    sub:'看護休暇：子が1人なら年5日・2人以上なら年10日。\n介護休暇：対象家族1人なら年5日・2人以上なら年10日' },
+
+  { cat:'labor', type:'name', label:'労働・育児',
+    q:'業務上の負傷・疾病・障害・死亡に対して補償する保険制度は？',
+    a:'労災保険（労働者災害補償保険）',
+    sub:'保険料は全額事業主負担。\n通勤災害も対象' },
+
+  { cat:'labor', type:'detail', label:'労働・育児',
+    q:'産前産後休業は出産前後それぞれ何週間取得できる？',
+    a:'産前6週間（多胎妊娠は14週）・産後8週間',
+    sub:'産後6週は就業禁止（本人が請求すれば6週以降就業可）' },
+
+  // ─── 生活保護・介護 ──────────────────────────
+  { cat:'livelihood', type:'name', label:'生活保護・介護',
+    q:'生活に困窮するすべての国民に最低限度の生活を保障する制度は？',
+    a:'生活保護制度',
+    sub:'根拠：生活保護法（憲法25条の最低生活保障を具体化）\n扶助の種類：生活・住宅・教育・医療・介護・出産・生業・葬祭' },
+
+  { cat:'livelihood', type:'detail', label:'生活保護・介護',
+    q:'生活保護の原則である「補足性の原理」とはどういう意味か？',
+    a:'資産・能力・他制度・扶養を最大限活用した上で、なお不足する部分を補う',
+    sub:'貯金・不動産の処分、他制度の優先利用（年金・失業給付など）、\n親族の扶養義務の確認などが求められる' },
+
+  { cat:'livelihood', type:'name', label:'生活保護・介護',
+    q:'40歳以上が加入し、介護が必要になった際にサービスを受けられる制度は？',
+    a:'介護保険制度',
+    sub:'65歳〜：第1号被保険者（原因問わず利用可）\n40〜64歳：第2号被保険者（特定疾病が原因の場合のみ）' },
+
+  { cat:'livelihood', type:'detail', label:'生活保護・介護',
+    q:'介護保険のサービスを利用した場合の自己負担割合は？',
+    a:'原則1割（一定以上の所得者は2割または3割）',
+    sub:'区分支給限度基準額の範囲内で利用。超過分は全額自己負担' },
+
+  { cat:'livelihood', type:'name', label:'生活保護・介護',
+    q:'障害のある人が自立した生活を送るための支援を定めた法律は？',
+    a:'障害者総合支援法（障害者の日常生活及び社会生活を総合的に支援するための法律）',
+    sub:'2013年施行。介護給付・訓練等給付・地域生活支援事業などを規定' },
+
+  // ─── 民法 ────────────────────────────────────
+  { cat:'minpo', type:'name', label:'民法',
+    q:'法定相続人の範囲と順位を定めている法律は？',
+    a:'民法（第887〜895条）',
+    sub:'第1順位：子（代襲相続あり）\n第2順位：直系尊属（父母・祖父母）\n第3順位：兄弟姉妹（代襲相続あり）\n配偶者は常に相続人' },
+
+  { cat:'minpo', type:'detail', label:'民法',
+    q:'配偶者と子が相続人の場合の法定相続分は？',
+    a:'配偶者 1/2 ・ 子 1/2（複数なら等分）',
+    sub:'例：子2人なら各1/4。\n非嫡出子の相続分は2013年の民法改正で嫡出子と同等になった' },
+
+  { cat:'minpo', type:'detail', label:'民法',
+    q:'配偶者と直系尊属（父母のみ）が相続人の場合の法定相続分は？',
+    a:'配偶者 2/3 ・ 直系尊属 1/3',
+    sub:'直系尊属が複数の場合は等分。\n子がいない場合に適用される第2順位のパターン' },
+
+  { cat:'minpo', type:'detail', label:'民法',
+    q:'配偶者と兄弟姉妹が相続人の場合の法定相続分は？',
+    a:'配偶者 3/4 ・ 兄弟姉妹 1/4',
+    sub:'第1・第2順位の法定相続人がいない場合に適用。\n兄弟姉妹には遺留分なし' },
+
+  { cat:'minpo', type:'name', label:'民法',
+    q:'相続人が最低限度受け取れる「遺留分」を侵害された場合に使える権利は？',
+    a:'遺留分侵害額請求権',
+    sub:'2019年改正で「遺留分減殺請求権」から変更。\n遺留分：直系尊属のみの場合は1/3、それ以外は1/2' },
+
+  { cat:'minpo', type:'name', label:'民法',
+    q:'被相続人が生前に財産の帰属先を指定する法律行為は？',
+    a:'遺言（ゆいごん・いごん）',
+    sub:'種類：自筆証書遺言・公正証書遺言・秘密証書遺言\n法定相続分より優先されるが遺留分は侵害不可' },
+
+  { cat:'minpo', type:'detail', label:'民法',
+    q:'自筆証書遺言の要件は？',
+    a:'全文・日付・氏名を自書し押印',
+    sub:'財産目録のみパソコン作成可（各頁に署名押印が必要）\n2020年〜：法務局での保管制度あり（家庭裁判所の検認不要）' },
+
+  { cat:'minpo', type:'name', label:'民法',
+    q:'相続財産の受取りを放棄する手続きは？',
+    a:'相続放棄',
+    sub:'相続の開始を知った日から3ヶ月以内に家庭裁判所に申述。\nプラスの財産もマイナスの財産（借金）もすべて引き継がない' },
+
+  { cat:'minpo', type:'ox', label:'民法',
+    q:'祖父が遺言なしで死亡。\n財産は妻（祖母）と一人っ子の父が半分ずつ相続する？',
+    a:'○ 正しい',
+    sub:'法定相続分：配偶者1/2・子1/2\n一人っ子の場合、子の取り分1/2はそのまま父が受け取る\n→祖母1/2・父1/2で合っている\n※非嫡出子の相続分1/2規定は2013年に撤廃（現在は嫡出子と同等）' },
+
+  { cat:'minpo', type:'ox', label:'民法',
+    q:'遺言書があれば、必ず遺言の内容どおりに相続される？',
+    a:'× 必ずしもそうではない',
+    sub:'相続人には「遺留分」が保障されており、\n遺言で遺留分を侵害した場合は侵害額請求が可能。\n遺言＞法定相続分だが、遺留分を下回ることはできない' },
+
+  { cat:'minpo', type:'ox', label:'民法',
+    q:'親より先に子が亡くなっていた場合、\nその子（被相続人の孫）は相続できない？',
+    a:'× 代襲相続で相続できる',
+    sub:'代襲相続：先に亡くなった法定相続人の子（孫）が代わりに相続。\n直系卑属は何代でも代襲可。兄弟姉妹の代襲は一代限り（甥・姪まで）' },
+];
+
+// ══════════════════════════════════════════════
+// カテゴリ設定
+// ══════════════════════════════════════════════
+const CATEGORY_STYLES = {
+  pension:    { text: '#2563eb', bg: '#eff6ff', card: '#1d4ed8' },
+  medical:    { text: '#0891b2', bg: '#ecfeff', card: '#0e7490' },
+  labor:      { text: '#7c3aed', bg: '#f5f3ff', card: '#6d28d9' },
+  livelihood: { text: '#dc2626', bg: '#fef2f2', card: '#b91c1c' },
+  minpo:      { text: '#0f766e', bg: '#f0fdfa', card: '#0f766e' },
+};
+
+// フィルター定義（Start overlay のボタンに使う）
+// id: フィルターの識別子、label: 表示名、match: カード判定関数
+const FILTER_DEFS = [
+  { id: 'all',        label: 'すべて',     match: ()  => true },
+  { id: 'pension',    label: '年金',       match: c => c.cat === 'pension' },
+  { id: 'medical',    label: '医療・保健', match: c => c.cat === 'medical' },
+  { id: 'labor',      label: '労働・育児', match: c => c.cat === 'labor' },
+  { id: 'livelihood', label: '生活保護・介護', match: c => c.cat === 'livelihood' },
+  { id: 'minpo',      label: '民法',       match: c => c.cat === 'minpo' },
+  { id: 'name',       label: '制度名のみ', match: c => c.type === 'name' },
+  { id: 'detail',     label: '数値・内容', match: c => c.type === 'detail' },
+  { id: 'ox',         label: '○×問題',    match: c => c.type === 'ox' },
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const SWAP_OUT_MS = 130;
+const SWAP_IN_MS  = 170;
+
+let allCards        = ALL_CARDS;
+let deck            = [];
+let deckIdx         = 0;
+let isFlipped       = false;
+let isTransitioning = false;
+let mastery         = {};
+let listOpen        = false;
+let shuffleOn       = false;
+
+let selectedFilterId = 'all';
+let selectedCount    = '20';
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+(function init() {
+  buildFilters();
+  updateStartMeta();
+  openStartScreen();
+
+  const sel = document.getElementById('startCount');
+  if (sel) {
+    sel.addEventListener('change', e => { selectedCount = e.target.value; updateStartMeta(); });
+    selectedCount = sel.value;
+  }
+
+  document.getElementById('shuffleBtn').addEventListener('click', () => {
+    shuffleOn = !shuffleOn;
+    document.getElementById('shuffleBtn').classList.toggle('active', shuffleOn);
+    document.getElementById('shuffleLabel').textContent = shuffleOn ? 'on' : 'shuffle';
+    showToast(shuffleOn ? 'シャッフル: ON' : 'シャッフル: OFF');
+  });
+})();
+
+// ══════════════════════════════════════════════
+// FILTERS
+// ══════════════════════════════════════════════
+function buildFilters() {
+  const wrap = document.getElementById('startCats');
+  if (!wrap) return;
+
+  wrap.innerHTML = FILTER_DEFS.map(f => {
+    const n = allCards.filter(f.match).length;
+    return `<button class="start-cat ${f.id === selectedFilterId ? 'active' : ''}"
+              data-filter="${f.id}" onclick="selectFilter('${f.id}')">
+              ${f.label}
+              <span style="font-size:0.65rem;opacity:0.65;margin-left:4px">${n}</span>
+            </button>`;
+  }).join('');
+}
+
+function selectFilter(id) {
+  selectedFilterId = id;
+  document.querySelectorAll('.start-cat').forEach(b =>
+    b.classList.toggle('active', b.dataset.filter === id)
+  );
+  updateStartMeta();
+}
+
+// ══════════════════════════════════════════════
+// START SCREEN
+// ══════════════════════════════════════════════
+function updateStartMeta() {
+  const filter = FILTER_DEFS.find(f => f.id === selectedFilterId);
+  const pool   = filter ? allCards.filter(filter.match) : allCards;
+  const actual = selectedCount === 'all'
+    ? pool.length
+    : Math.min(Number(selectedCount), pool.length);
+  const el = document.getElementById('startMeta');
+  if (el) el.textContent = `出題: ${actual}問 ／ 対象: ${pool.length}問`;
+}
+
+function openStartScreen() {
+  mastery = {};
+  document.getElementById('startOverlay').classList.remove('hidden');
+  document.getElementById('completeOverlay').style.display = 'none';
+  updateStartMeta();
+}
+
+function startStudy() {
+  document.getElementById('startOverlay').classList.add('hidden');
+  mastery = {};
+  buildDeck();
+}
+
+// ══════════════════════════════════════════════
+// DECK
+// ══════════════════════════════════════════════
+function buildDeck() {
+  const filter = FILTER_DEFS.find(f => f.id === selectedFilterId) || FILTER_DEFS[0];
+  let pool = allCards.filter(filter.match);
+
+  if (shuffleOn) {
+    pool = shuffle([...pool]);
+  }
+  if (selectedCount !== 'all') {
+    pool = pool.slice(0, Math.min(Number(selectedCount), pool.length));
+  }
+
+  deck    = pool;
+  deckIdx = 0;
+  isFlipped = false;
+  renderCard();
+  renderDots();
+  renderList();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ══════════════════════════════════════════════
+// RENDER CARD
+// ══════════════════════════════════════════════
+function renderCard() {
+  const body = document.getElementById('cardBody');
+  body.classList.add('no-transition');
+  body.classList.remove('flipped');
+  void body.offsetWidth;
+  body.classList.remove('no-transition');
+
+  isFlipped = false;
+  setMasteryActive(false);
+
+  if (!deck.length) {
+    document.getElementById('cardQuestion').textContent  = '該当する問題がありません';
+    document.getElementById('cardAnswer').textContent    = '';
+    document.getElementById('cardSub').textContent       = '';
+    document.getElementById('deckIndicator').textContent = '0 / 0';
+    updateProgress(0);
+    return;
+  }
+
+  const card = deck[deckIdx];
+  const col  = CATEGORY_STYLES[card.cat] || CATEGORY_STYLES.pension;
+
+  // フロントバッジ（label ＋ type pip）
+  const fb = document.getElementById('frontBadge');
+  const typePip = `<span class="type-pip ${card.type}">${
+    card.type === 'name' ? '制度名' : card.type === 'ox' ? '○×' : '数値・内容'
+  }</span>`;
+  fb.innerHTML        = escHtml(card.label) + typePip;
+  fb.style.color      = col.text;
+  fb.style.background = col.bg;
+  fb.style.border     = `1px solid ${col.text}33`;
+
+  // バックバッジ
+  document.getElementById('backBadge').textContent = card.label;
+
+  // 裏面カラー
+  const back = document.getElementById('cardBack');
+  back.style.setProperty('--card-back-color', col.card);
+  back.style.background = col.card;
+
+  document.getElementById('cardQuestion').textContent = card.q;
+  document.getElementById('cardAnswer').textContent   = card.a;
+  document.getElementById('cardSub').textContent      = card.sub || '';
+
+  const total = deck.length;
+  document.getElementById('deckIndicator').textContent = `${deckIdx + 1} / ${total}`;
+  document.getElementById('prevBtn').disabled = deckIdx === 0;
+  document.getElementById('nextBtn').disabled = deckIdx === total - 1;
+  updateProgress((deckIdx + 1) / total);
+
+  renderDots();
+  renderList();
+}
+
+function updateProgress(ratio) {
+  document.getElementById('progressFill').style.width = (ratio * 100) + '%';
+}
+
+// ══════════════════════════════════════════════
+// FLIP
+// ══════════════════════════════════════════════
+function flipCard() {
+  if (!deck.length || isTransitioning) return;
+  isFlipped = !isFlipped;
+  document.getElementById('cardBody').classList.toggle('flipped', isFlipped);
+  setMasteryActive(isFlipped);
+}
+
+function setMasteryActive(on) {
+  document.querySelectorAll('.mastery-btn').forEach(b => b.classList.toggle('active', on));
+}
+
+// ══════════════════════════════════════════════
+// TRANSITION
+// ══════════════════════════════════════════════
+function transitionToCard(targetIdx, direction) {
+  if (!deck.length || isTransitioning) return;
+  if (targetIdx < 0 || targetIdx >= deck.length) return;
+  if (targetIdx === deckIdx) return;
+
+  isTransitioning = true;
+  const scene = document.getElementById('cardScene');
+  scene.classList.add('is-swapping');
+  scene.classList.remove('swap-out-left','swap-out-right','swap-in-left','swap-in-right');
+
+  const outClass = direction >= 0 ? 'swap-out-left'  : 'swap-out-right';
+  const inClass  = direction >= 0 ? 'swap-in-right'  : 'swap-in-left';
+
+  scene.classList.add(outClass);
+  setTimeout(() => {
+    scene.classList.remove(outClass);
+    deckIdx = targetIdx;
+    renderCard();
+    void scene.offsetWidth;
+    scene.classList.add(inClass);
+    setTimeout(() => {
+      scene.classList.remove(inClass, 'is-swapping');
+      isTransitioning = false;
+    }, SWAP_IN_MS);
+  }, SWAP_OUT_MS);
+}
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function nextCard() {
+  if (isTransitioning) return;
+  if (deckIdx < deck.length - 1) transitionToCard(deckIdx + 1, 1);
+  else showComplete();
+}
+
+function prevCard() {
+  if (isTransitioning) return;
+  if (deckIdx > 0) transitionToCard(deckIdx - 1, -1);
+}
+
+function jumpTo(idx) {
+  if (isTransitioning || idx === deckIdx) return;
+  transitionToCard(idx, idx > deckIdx ? 1 : -1);
+  if (window.innerWidth < 640) toggleList();
+}
+
+// ══════════════════════════════════════════════
+// MASTERY
+// ══════════════════════════════════════════════
+function markCard(level) {
+  if (!isFlipped || !deck.length || isTransitioning) return;
+  mastery[deckIdx] = level;
+  renderDots();
+  renderList();
+
+  const idxMap = { forgot: 0, unsure: 1, knew: 2 };
+  const btn = document.querySelectorAll('.mastery-btn')[idxMap[level]];
+  if (btn) {
+    btn.style.transform = 'scale(0.91)';
+    setTimeout(() => { btn.style.transform = ''; }, 130);
+  }
+
+  setTimeout(() => {
+    if (deckIdx < deck.length - 1) transitionToCard(deckIdx + 1, 1);
+    else showComplete();
+  }, 240);
+}
+
+// ══════════════════════════════════════════════
+// MASTERY DOTS
+// ══════════════════════════════════════════════
+function renderDots() {
+  const row = document.getElementById('masteryDots');
+  if (!deck.length || deck.length > 60) { row.innerHTML = ''; return; }
+  row.innerHTML = deck.map((_, i) => {
+    const m = mastery[i] || '';
+    return `<div class="m-dot ${m} ${i === deckIdx ? 'current' : ''}"></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// COMPLETE
+// ══════════════════════════════════════════════
+function showComplete() {
+  const total  = deck.length;
+  const knew   = Object.values(mastery).filter(v => v === 'knew').length;
+  const unsure = Object.values(mastery).filter(v => v === 'unsure').length;
+  const forgot = Object.values(mastery).filter(v => v === 'forgot').length;
+  const skip   = total - knew - unsure - forgot;
+
+  document.getElementById('completeStats').innerHTML = `
+    <div class="stat-pill sp-knew"><span class="sp-n">${knew}</span><span class="sp-l">わかった</span></div>
+    <div class="stat-pill sp-unsure"><span class="sp-n">${unsure}</span><span class="sp-l">あやふや</span></div>
+    <div class="stat-pill sp-forgot"><span class="sp-n">${forgot}</span><span class="sp-l">わからない</span></div>
+    ${skip > 0 ? `<div class="stat-pill"><span class="sp-n">${skip}</span><span class="sp-l">未確認</span></div>` : ''}
+  `;
+
+  // カテゴリ別内訳
+  const catMap = {};
+  deck.forEach((card, i) => {
+    const key = card.cat;
+    if (!catMap[key]) catMap[key] = { label: card.label, knew: 0, total: 0 };
+    catMap[key].total++;
+    if (mastery[i] === 'knew') catMap[key].knew++;
+  });
+  document.getElementById('completeBreakdown').innerHTML = Object.values(catMap).map(c => {
+    const pct = c.total ? Math.round(c.knew / c.total * 100) : 0;
+    return `<div class="breakdown-row">
+      <span class="breakdown-label">${c.label}</span>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${pct}%"></div></div>
+      <span class="breakdown-num">${c.knew}/${c.total}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('completeOverlay').style.display = 'flex';
+}
+
+function reviewWeak() {
+  document.getElementById('completeOverlay').style.display = 'none';
+  const weak = deck.filter((_, i) => mastery[i] !== 'knew');
+  if (!weak.length) { showToast('すべて「わかった」です！'); restartDeck(); return; }
+  deck    = shuffle(weak);
+  deckIdx = 0;
+  mastery = {};
+  renderCard(); renderDots(); renderList();
+}
+
+function restartDeck() {
+  document.getElementById('completeOverlay').style.display = 'none';
+  openStartScreen();
+}
+
+// ══════════════════════════════════════════════
+// SIDE LIST
+// ══════════════════════════════════════════════
+function toggleList() {
+  listOpen = !listOpen;
+  document.getElementById('listPanel').classList.toggle('open', listOpen);
+  document.getElementById('listArrow').textContent = listOpen ? '‹' : '›';
+}
+
+function renderList() {
+  const body = document.getElementById('listBody');
+  if (!body || !deck.length) { if (body) body.innerHTML = ''; return; }
+
+  body.innerHTML = deck.map((card, i) => {
+    const m   = mastery[i] || '';
+    const txt = card.q.length > 36
+      ? card.q.slice(0, 36).replace(/\n/g, ' ') + '…'
+      : card.q.replace(/\n/g, ' ');
+    return `<div class="list-item ${i === deckIdx ? 'current' : ''}" onclick="jumpTo(${i})">
+      <span class="li-n">${i + 1}</span>
+      <span class="li-d ${m}"></span>
+      <span class="li-t">${txt}</span>
+    </div>`;
+  }).join('');
+
+  const cur = body.querySelector('.current');
+  if (cur) cur.scrollIntoView({ block: 'nearest' });
+}
+
+// ══════════════════════════════════════════════
+// KEYBOARD
+// ══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  switch (e.code) {
+    case 'Space':      e.preventDefault(); flipCard(); break;
+    case 'ArrowRight': nextCard(); break;
+    case 'ArrowLeft':  prevCard(); break;
+    case 'Digit1':     if (isFlipped) markCard('forgot'); break;
+    case 'Digit2':     if (isFlipped) markCard('unsure'); break;
+    case 'Digit3':     if (isFlipped) markCard('knew');   break;
+  }
+});
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let _toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('visible'), 2400);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ▼ タイトルを変更 -->
+<title>まとめノート</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <!-- ▼ タイトルと教科を変更 -->
+    <h1>細胞と生命の基礎</h1>
+    <div class="subject">生物基礎 · Unit 1</div>
+  </div>
+  <div class="score-display">
+    <strong id="score-val">—</strong>
+    <span>正解率</span>
+  </div>
+</header>
+
+<div class="controls">
+  <button class="primary" onclick="checkAll()">✓ 採点する</button>
+  <button onclick="revealAll()">答えを表示</button>
+  <button onclick="resetAll()">リセット</button>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+
+<!-- ══════════════════════════════════════════
+     セクション 1：穴埋め（文章型）
+
+     書き方:
+       <span class="blank-wrapper">
+         <input class="blank" data-answer="正解" placeholder="　　　">
+         <span class="hint-icon" title="ヒント文">?</span>  ← 省略可
+       </span>
+
+     ヒントが不要な場合は <span class="hint-icon"> ごと削除してOK
+     ══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    穴埋め問題 — 文中の空欄を埋めよ
+    <span class="section-num">§1</span>
+  </div>
+  <div class="section-body">
+    <div class="prose">
+
+      <p>
+        細胞は生命の基本単位であり、すべての生物は一つ以上の細胞から成る。
+        核を持つ細胞を<span class="blank-wrapper"><input class="blank" data-answer="真核細胞" placeholder="　　　"><span class="hint-icon" title="ヒント: 核あり">?</span></span>、
+        核を持たない細胞を<span class="blank-wrapper"><input class="blank" data-answer="原核細胞" placeholder="　　　"><span class="hint-icon" title="ヒント: バクテリアなど">?</span></span>という。
+      </p>
+
+      <p>
+        細胞内でATPを合成し、エネルギーを供給するオルガネラを
+        <span class="blank-wrapper"><input class="blank" data-answer="ミトコンドリア" placeholder="　　　　　"></span>という。
+        一方、植物細胞のみに存在し、光合成を行う器官は
+        <span class="blank-wrapper"><input class="blank" data-answer="葉緑体" placeholder="　　　"></span>である。
+      </p>
+
+      <p>
+        細胞膜の主な成分は<span class="blank-wrapper"><input class="blank" data-answer="リン脂質" placeholder="　　　"></span>であり、
+        その二重層の中にタンパク質が埋め込まれた構造を
+        <span class="blank-wrapper"><input class="blank" data-answer="流動モザイクモデル" placeholder="　　　　　　　"></span>という。
+      </p>
+
+    </div>
+  </div>
+  <div class="answer-key" id="key-1">
+    <strong>答え:</strong>
+    真核細胞 / 原核細胞 / ミトコンドリア / 葉緑体 / リン脂質 / 流動モザイクモデル
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     セクション 2：一問一答 Q&A
+     ══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    一問一答
+    <span class="section-num">§2</span>
+  </div>
+  <div class="section-body">
+    <ul class="q-list">
+
+      <li>
+        <span class="q-num">Q1</span>
+        <span>
+          細胞分裂の際に遺伝情報を伝える物質は何か？<br>
+          → <span class="blank-wrapper"><input class="blank" data-answer="DNA" placeholder="　　"></span>
+        </span>
+      </li>
+
+      <li>
+        <span class="q-num">Q2</span>
+        <span>
+          DNAの二重らせん構造を発見した科学者二名を挙げよ。<br>
+          → <span class="blank-wrapper"><input class="blank" data-answer="ワトソン" placeholder="　　　"></span> と
+            <span class="blank-wrapper"><input class="blank" data-answer="クリック" placeholder="　　　"></span>
+        </span>
+      </li>
+
+      <li>
+        <span class="q-num">Q3</span>
+        <span>
+          タンパク質合成の場として機能するオルガネラは？<br>
+          → <span class="blank-wrapper"><input class="blank" data-answer="リボソーム" placeholder="　　　"></span>
+        </span>
+      </li>
+
+    </ul>
+  </div>
+  <div class="answer-key" id="key-2">
+    <strong>答え:</strong>
+    Q1: DNA &nbsp;|&nbsp; Q2: ワトソン・クリック &nbsp;|&nbsp; Q3: リボソーム
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     セクション 3：フラッシュカード
+     クリックで裏返る
+     ══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    フラッシュカード — クリックで裏返す
+    <span class="section-num">§3</span>
+  </div>
+  <div class="section-body">
+    <div class="flashcard-grid">
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">光合成の化学式</div>
+          <div class="flashcard-back">6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">細胞膜の機能</div>
+          <div class="flashcard-back">選択的透過性により物質の出入りを制御する</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">ATPとは？</div>
+          <div class="flashcard-back">アデノシン三リン酸。細胞のエネルギー通貨</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="flashcard-inner">
+          <div class="flashcard-front">核の役割</div>
+          <div class="flashcard-back">遺伝情報(DNA)の保存と転写の制御</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<p class="note">← Enterキーで採点 &nbsp;|&nbsp; ヒントアイコンをホバーでヒント表示 →</p>
+
+<script src="note.js"></script>
+</body>
+</html>

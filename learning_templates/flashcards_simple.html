@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards — 英単語</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-surface: #ffffff;
+      --color-border: #e8e8e5;
+      --color-text-primary: #1a1a1a;
+      --color-text-secondary: #6b6b6b;
+      --color-accent: #2d6a4f;
+      --color-accent-light: #e8f5e9;
+      --color-know: #1a7a4a;
+      --color-know-bg: #e8f5e9;
+      --color-dontknow: #b91c1c;
+      --color-dontknow-bg: #fee2e2;
+
+      --font-sans: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+      --font-display: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.09);
+      --shadow-card: 0 8px 40px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-feature-settings: "pkna";
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.8;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ヘッダー */
+    header {
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--color-border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--color-surface);
+    }
+    .header__title {
+      font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
+    }
+    .header__sub { font-size: 0.8rem; color: var(--color-text-secondary); }
+
+    /* プログレス */
+    .progress-wrap {
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .progress-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--space-xs);
+    }
+    .progress-label { font-size: 0.8rem; color: var(--color-text-secondary); }
+    .progress-count {
+      font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-text-primary);
+    }
+    .progress-track {
+      height: 4px; background: var(--color-border); border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--color-accent); border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    /* スコアバッジ */
+    .score-row {
+      display: flex; gap: var(--space-sm); margin-top: var(--space-xs);
+    }
+    .badge {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.78rem; padding: 0.15rem 0.6rem;
+      border-radius: 99px; font-weight: 500;
+    }
+    .badge--know { background: var(--color-know-bg); color: var(--color-know); }
+    .badge--dontknow { background: var(--color-dontknow-bg); color: var(--color-dontknow); }
+
+    /* メインエリア */
+    main {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: var(--space-lg) var(--space-md);
+      gap: var(--space-lg);
+    }
+
+    /* カード */
+    .card-scene {
+      width: 100%; max-width: 560px;
+      perspective: 1200px;
+    }
+    .card-flipper {
+      width: 100%; position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .card-flipper.is-flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      width: 100%;
+      backface-visibility: hidden;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-xl) var(--space-lg);
+      min-height: 280px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      user-select: none;
+    }
+    .card-face--back {
+      position: absolute; top: 0; left: 0;
+      transform: rotateY(180deg);
+      background: var(--color-text-primary);
+      color: white;
+      border-color: transparent;
+    }
+
+    .card-face__hint {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--color-text-secondary); margin-bottom: var(--space-md);
+    }
+    .card-face--back .card-face__hint { color: rgba(255,255,255,0.4); }
+
+    .card-face__word {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700; line-height: 1.2;
+      margin-bottom: var(--space-sm);
+    }
+    .card-face__phonetic {
+      font-family: var(--font-mono);
+      font-size: 0.85rem; color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+    }
+    .card-face--back .card-face__phonetic { color: rgba(255,255,255,0.5); }
+
+    .card-face__pos {
+      display: inline-block;
+      font-size: 0.72rem; padding: 0.2rem 0.7rem;
+      border: 1px solid var(--color-border); border-radius: 99px;
+      color: var(--color-text-secondary); margin-bottom: var(--space-md);
+    }
+    .card-face--back .card-face__pos {
+      border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);
+    }
+
+    .card-face__meaning {
+      font-size: 1.05rem; font-weight: 500; margin-bottom: var(--space-sm);
+    }
+    .card-face__example {
+      font-size: 0.85rem; color: rgba(255,255,255,0.6);
+      font-style: italic; line-height: 1.7; max-width: 380px;
+    }
+
+    /* タップヒント */
+    .tap-hint {
+      font-size: 0.78rem; color: var(--color-text-secondary);
+      text-align: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+    /* アクションボタン */
+    .actions {
+      display: flex; gap: var(--space-md); width: 100%; max-width: 560px;
+      justify-content: center;
+    }
+    .btn-action {
+      flex: 1; max-width: 200px;
+      display: flex; align-items: center; justify-content: center; gap: var(--space-xs);
+      padding: 0.85rem var(--space-md);
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans); font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; border: 2px solid; transition: all 0.15s;
+    }
+    .btn-action--know {
+      background: var(--color-know-bg); border-color: var(--color-know);
+      color: var(--color-know);
+    }
+    .btn-action--know:hover { background: var(--color-know); color: white; }
+    .btn-action--dontknow {
+      background: var(--color-dontknow-bg); border-color: var(--color-dontknow);
+      color: var(--color-dontknow);
+    }
+    .btn-action--dontknow:hover { background: var(--color-dontknow); color: white; }
+    .btn-action:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-action:disabled:hover { background: inherit; color: inherit; }
+
+    .btn-icon { font-size: 1.1rem; }
+
+    /* ナビゲーション */
+    .nav-row {
+      display: flex; gap: var(--space-sm); width: 100%; max-width: 560px;
+      justify-content: center;
+    }
+    .btn-nav {
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans); font-size: 0.85rem;
+      cursor: pointer; border: 1px solid var(--color-border);
+      background: var(--color-surface); color: var(--color-text-secondary);
+      transition: all 0.15s;
+    }
+    .btn-nav:hover { background: var(--color-bg); color: var(--color-text-primary); }
+    .btn-nav:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* 完了画面 */
+    .result-screen {
+      display: none; flex-direction: column; align-items: center;
+      text-align: center; gap: var(--space-md);
+      width: 100%; max-width: 480px;
+    }
+    .result-screen.is-active { display: flex; }
+    .result-screen .card-scene { display: none; }
+
+    .result-emoji { font-size: 4rem; }
+    .result-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; }
+    .result-sub { color: var(--color-text-secondary); }
+    .result-stats {
+      display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;
+    }
+    .result-stat {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); text-align: center;
+    }
+    .result-stat__n {
+      font-family: var(--font-mono); font-size: 2rem; font-weight: 700;
+    }
+    .result-stat__n--know { color: var(--color-know); }
+    .result-stat__n--dontknow { color: var(--color-dontknow); }
+    .result-stat__label { font-size: 0.8rem; color: var(--color-text-secondary); }
+
+    .btn-restart {
+      padding: 0.75rem 2rem; border-radius: var(--radius-sm);
+      background: var(--color-accent); color: white; border: none;
+      font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-restart:hover { opacity: 0.85; }
+
+    footer {
+      padding: var(--space-sm) var(--space-md);
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      border-top: 1px solid var(--color-border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <p class="header__title">Flashcards</p>
+    <p class="header__sub">英単語 — クイックレビュー</p>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-row">
+    <span class="progress-label">進捗</span>
+    <span class="progress-count" id="progress-count">0 / 0</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="score-row">
+    <span class="badge badge--know">✓ 知ってる: <span id="score-know">0</span></span>
+    <span class="badge badge--dontknow">✗ 要復習: <span id="score-dontknow">0</span></span>
+  </div>
+</div>
+
+<main>
+  <!-- カードエリア -->
+  <div class="card-scene" id="card-scene">
+    <div class="card-flipper" id="card-flipper" onclick="flipCard()">
+      <!-- 表面: 英語 -->
+      <div class="card-face card-face--front">
+        <p class="card-face__hint">tap to reveal meaning</p>
+        <p class="card-face__word" id="word"></p>
+        <p class="card-face__phonetic" id="phonetic"></p>
+        <span class="card-face__pos" id="pos"></span>
+      </div>
+      <!-- 裏面: 日本語 -->
+      <div class="card-face card-face--back">
+        <p class="card-face__hint">meaning</p>
+        <p class="card-face__word" id="meaning"></p>
+        <p class="card-face__phonetic" id="word-back"></p>
+        <p class="card-face__example" id="example"></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="tap-hint" id="tap-hint">カードをタップして意味を確認</p>
+
+  <!-- 知ってる／要復習ボタン -->
+  <div class="actions" id="actions">
+    <button class="btn-action btn-action--dontknow" id="btn-dontknow" onclick="judge(false)" disabled>
+      <span class="btn-icon">✗</span> 要復習
+    </button>
+    <button class="btn-action btn-action--know" id="btn-know" onclick="judge(true)" disabled>
+      <span class="btn-icon">✓</span> 知ってる
+    </button>
+  </div>
+
+  <!-- 前へ／次へ -->
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev" onclick="go(-1)" disabled>← 前へ</button>
+    <button class="btn-nav" id="btn-next" onclick="go(1)">次へ →</button>
+  </div>
+
+  <!-- 完了画面 -->
+  <div class="result-screen" id="result-screen">
+    <p class="result-emoji" id="result-emoji">🎉</p>
+    <p class="result-title">お疲れさま！</p>
+    <p class="result-sub" id="result-sub"></p>
+    <div class="result-stats">
+      <div class="result-stat">
+        <p class="result-stat__n result-stat__n--know" id="final-know">0</p>
+        <p class="result-stat__label">知ってた</p>
+      </div>
+      <div class="result-stat">
+        <p class="result-stat__n result-stat__n--dontknow" id="final-dontknow">0</p>
+        <p class="result-stat__label">要復習</p>
+      </div>
+    </div>
+    <button class="btn-restart" onclick="restart()">もう一度 →</button>
+  </div>
+</main>
+
+<footer>カードをタップで表裏切り替え &nbsp;·&nbsp; ✓ / ✗ で仕分け</footer>
+
+<script>
+  const CARDS = [
+    { word: "ambiguous", phonetic: "/æmˈbɪɡjuəs/", pos: "adj.", meaning: "曖昧な、多義的な", example: "The contract contained several ambiguous clauses that led to disputes." },
+    { word: "meticulous", phonetic: "/məˈtɪkjʊləs/", pos: "adj.", meaning: "細心の注意を払う、几帳面な", example: "She was meticulous in her research, double-checking every source." },
+    { word: "eloquent", phonetic: "/ˈɛləkwənt/", pos: "adj.", meaning: "雄弁な、説得力のある", example: "His eloquent speech moved the entire audience to tears." },
+    { word: "pragmatic", phonetic: "/præɡˈmætɪk/", pos: "adj.", meaning: "実用的な、現実的な", example: "We need a pragmatic solution, not just theoretical ideas." },
+    { word: "coherent", phonetic: "/kəʊˈhɪərənt/", pos: "adj.", meaning: "首尾一貫した、理解しやすい", example: "Please provide a coherent explanation of your argument." },
+    { word: "sovereignty", phonetic: "/ˈsɒvrənti/", pos: "noun", meaning: "主権、統治権", example: "The treaty recognized the country's sovereignty over the disputed territory." },
+    { word: "paradigm", phonetic: "/ˈpærədaɪm/", pos: "noun", meaning: "パラダイム、模範的な例", example: "The discovery triggered a paradigm shift in physics." },
+    { word: "perpetuate", phonetic: "/pəˈpɛtʃueɪt/", pos: "verb", meaning: "永続させる、継続させる", example: "Such stereotypes only perpetuate harmful biases in society." },
+    { word: "alleviate", phonetic: "/əˈliːvieɪt/", pos: "verb", meaning: "和らげる、軽減する", example: "The new policy aims to alleviate poverty in rural areas." },
+    { word: "inevitably", phonetic: "/ɪnˈɛvɪtəbli/", pos: "adv.", meaning: "必然的に、不可避的に", example: "Progress inevitably brings both opportunities and challenges." },
+    { word: "substantial", phonetic: "/səbˈstænʃəl/", pos: "adj.", meaning: "実質的な、かなりの", example: "There is substantial evidence to support this theory." },
+    { word: "scrutiny", phonetic: "/ˈskruːtɪni/", pos: "noun", meaning: "精密な調査、監視", example: "The new law came under intense public scrutiny." },
+  ];
+
+  let idx = 0;
+  let flipped = false;
+  let judged = [];
+  let know = 0;
+  let dontknow = 0;
+
+  function init() {
+    judged = new Array(CARDS.length).fill(null);
+    know = 0; dontknow = 0; idx = 0;
+    updateCard();
+    updateProgress();
+    document.getElementById('result-screen').classList.remove('is-active');
+    document.getElementById('card-scene').style.display = '';
+    document.getElementById('actions').style.display = '';
+    document.getElementById('tap-hint').style.display = '';
+  }
+
+  function updateCard() {
+    const c = CARDS[idx];
+    document.getElementById('word').textContent = c.word;
+    document.getElementById('phonetic').textContent = c.phonetic;
+    document.getElementById('pos').textContent = c.pos;
+    document.getElementById('meaning').textContent = c.meaning;
+    document.getElementById('word-back').textContent = c.word + ' ' + c.phonetic;
+    document.getElementById('example').textContent = c.example;
+
+    // カードをリセット
+    const flipper = document.getElementById('card-flipper');
+    flipper.classList.remove('is-flipped');
+    flipped = false;
+
+    // ボタン状態
+    const btnKnow = document.getElementById('btn-know');
+    const btnDontknow = document.getElementById('btn-dontknow');
+    btnKnow.disabled = true;
+    btnDontknow.disabled = true;
+
+    document.getElementById('btn-prev').disabled = idx === 0;
+    document.getElementById('btn-next').disabled = idx === CARDS.length - 1;
+  }
+
+  function flipCard() {
+    const flipper = document.getElementById('card-flipper');
+    flipped = !flipped;
+    flipper.classList.toggle('is-flipped', flipped);
+    if (flipped && judged[idx] === null) {
+      document.getElementById('btn-know').disabled = false;
+      document.getElementById('btn-dontknow').disabled = false;
+    }
+  }
+
+  function judge(isKnow) {
+    if (judged[idx] !== null) return;
+    judged[idx] = isKnow;
+    if (isKnow) know++; else dontknow++;
+    updateProgress();
+    document.getElementById('btn-know').disabled = true;
+    document.getElementById('btn-dontknow').disabled = true;
+
+    // 全カード判定済みなら完了画面へ
+    const done = judged.every(v => v !== null);
+    if (done) {
+      setTimeout(showResult, 600);
+    } else {
+      // 次の未判定カードへ自動送り
+      setTimeout(() => {
+        const next = CARDS.findIndex((_, i) => i > idx && judged[i] === null);
+        if (next !== -1) { idx = next; updateCard(); }
+        else {
+          const any = CARDS.findIndex((_, i) => judged[i] === null);
+          if (any !== -1) { idx = any; updateCard(); }
+        }
+      }, 500);
+    }
+  }
+
+  function go(dir) {
+    idx = Math.max(0, Math.min(CARDS.length - 1, idx + dir));
+    updateCard();
+    // 既判定なら即flip不要だがボタン有効化はしない
+  }
+
+  function updateProgress() {
+    const total = CARDS.length;
+    const done = judged.filter(v => v !== null).length;
+    document.getElementById('progress-count').textContent = `${done} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
+    document.getElementById('score-know').textContent = know;
+    document.getElementById('score-dontknow').textContent = dontknow;
+  }
+
+  function showResult() {
+    document.getElementById('card-scene').style.display = 'none';
+    document.getElementById('actions').style.display = 'none';
+    document.getElementById('tap-hint').style.display = 'none';
+    document.getElementById('final-know').textContent = know;
+    document.getElementById('final-dontknow').textContent = dontknow;
+    const pct = Math.round((know / CARDS.length) * 100);
+    const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📖';
+    document.getElementById('result-emoji').textContent = emoji;
+    document.getElementById('result-sub').textContent = `正答率 ${pct}% — ${CARDS.length}枚完了`;
+    document.getElementById('result-screen').classList.add('is-active');
+  }
+
+  function restart() {
+    init();
+  }
+
+  // キーボードショートカット
+  document.addEventListener('keydown', e => {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+    if (e.key === 'ArrowRight' || e.key === 'l') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'h') go(-1);
+    if (e.key === '1' || e.key === 'x') judge(false);
+    if (e.key === '2' || e.key === 'o') judge(true);
+  });
+
+  init();
+</script>
+</body>
+</html>
