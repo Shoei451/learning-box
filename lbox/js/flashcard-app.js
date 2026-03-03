@@ -79,17 +79,18 @@ function applyMeta() {
 function initApp() {
   // CARDS を内部形式に正規化
   // slug.js 側のフィールド: category, q, a, sub, image_url
-  //label廃止
+  // label は category と同じ（上書き可）
   allCards = CARDS.map((c, i) => ({
     id:        i,
     category:  c.category || 'default',
-    //label:     c.label    || c.category || 'default',
-    type:      c.type     || '',
+    label:     c.label    || c.category || 'default',
+    //type:      c.type     || '',
     q:         c.q,
     a:         c.a,
     sub:       c.sub       || '',
     image_url: c.image_url || '',
   }));
+
 
   buildFilters();
   updateStartMeta();
