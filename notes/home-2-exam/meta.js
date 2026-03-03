@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════
-// notes/home-ec-nutrition/meta.js
+// notes/home-2-exam/meta.js
 // 家庭基礎 — 食事と栄養・食品衛生 まとめノート
 // ══════════════════════════════════════════════
 
@@ -13,7 +13,7 @@ const UNITS_DATA = [
     id:    'u01',
     num:   '01',
     title: '栄養と栄養素の基本',
-    file:  'notes/home-ec-nutrition/01.md',
+    file:  'notes/home-2-exam/01.md',
     color: '#2d6a4f',
     quiz: [
       {
@@ -42,7 +42,7 @@ const UNITS_DATA = [
     id:    'u02',
     num:   '02',
     title: '炭水化物',
-    file:  'notes/home-ec-nutrition/02.md',
+    file:  'notes/home-2-exam/02.md',
     color: '#d97706',
     quiz: [
       {
@@ -79,7 +79,7 @@ const UNITS_DATA = [
     id:    'u03',
     num:   '03',
     title: '脂質',
-    file:  'notes/home-ec-nutrition/03.md',
+    file:  'notes/home-2-exam/03.md',
     color: '#b91c1c',
     quiz: [
       {
@@ -117,7 +117,7 @@ const UNITS_DATA = [
     id:    'u04',
     num:   '04',
     title: 'たんぱく質',
-    file:  'notes/home-ec-nutrition/04.md',
+    file:  'notes/home-2-exam/04.md',
     color: '#6d28d9',
     quiz: [
       {
@@ -150,7 +150,7 @@ const UNITS_DATA = [
     id:    'u05',
     num:   '05',
     title: '無機質',
-    file:  'notes/home-ec-nutrition/05.md',
+    file:  'notes/home-2-exam/05.md',
     color: '#0e7490',
     quiz: [
       {
@@ -183,7 +183,7 @@ const UNITS_DATA = [
     id:    'u06',
     num:   '06',
     title: 'ビタミン',
-    file:  'notes/home-ec-nutrition/06.md',
+    file:  'notes/home-2-exam/06.md',
     color: '#be185d',
     quiz: [
       {
@@ -224,7 +224,7 @@ const UNITS_DATA = [
     id:    'u07',
     num:   '07',
     title: '食事計画',
-    file:  'notes/home-ec-nutrition/07.md',
+    file:  'notes/home-2-exam/07.md',
     color: '#047857',
     quiz: [
       {
@@ -257,7 +257,7 @@ const UNITS_DATA = [
     id:    'u08',
     num:   '08',
     title: '食中毒の予防',
-    file:  'notes/home-ec-nutrition/08.md',
+    file:  'notes/home-2-exam/08.md',
     color: '#c2410c',
     quiz: [
       {
