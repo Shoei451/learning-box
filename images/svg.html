@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <body>
+  <svg id="svg1" width="230" height="230" >
+    <svg width="230" height="230" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景の角丸正方形（ブランドカラーのグリーン） -->
+  <rect width="32" height="32" rx="6" fill="#2D5A43"/>
+  
+  <!-- 学習を象徴する本のページと「S」のモチーフ -->
+  <path d="M9 10C9 8.89543 9.89543 8 11 8H21C22.1046 8 23 8.89543 23 10V22C23 23.1046 22.1046 24 21 24H11C9.89543 24 9 23.1046 9 22V10Z" fill="white"/>
+  <!-- 451を意識したライン、または抽象的なSの形 -->
+  <path d="M12 12H20" stroke="#2D5A43" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 16H20" stroke="#2D5A43" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 20H17" stroke="#2D5A43" stroke-width="2" stroke-linecap="round"/>  
+  <!-- アクセントのドット（通知や新しい発見をイメージ） -->
+  <circle cx="23" cy="9" r="3" fill="#4CAF50" stroke="#2D5A43" stroke-width="1"/>
+</svg>
+  <br />
+  <button onClick="downloadSvgAsSvg()">SVGとしてダウンロード</button>
+  <button onClick="downloadSvgAsPng()">PNGとしてダウンロード</button>
+  <script>
+      function downloadSvgAsSvg() {
+  // svg要素を取得
+  const svgNode = document.getElementById('svg1');
+  const svgText = new XMLSerializer().serializeToString(svgNode);
+  const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+  const svgUrl = URL.createObjectURL(svgBlob);
+
+  // a要素を作ってダウンロード
+  const a = document.createElement('a');
+  a.href = svgUrl;
+  a.download = `MySvg.svg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(svgUrl);
+}
+
+function downloadSvgAsPng() {
+  // svg要素を取得
+  const svgNode = document.getElementById('svg1');
+  const svgText = new XMLSerializer().serializeToString(svgNode);
+  console.log(svgText);
+  const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+  const svgUrl = URL.createObjectURL(svgBlob);
+
+  // Imageオブジェクトを生成
+  const im = new Image();
+
+  // Imageの作成に少し時間がかかるため、addEventListnerで行う
+  im.addEventListener('load', () => {
+    const width = svgNode.getAttribute('width');
+    const height = svgNode.getAttribute('height');
+
+    // canvasを作成
+    const cvs = document.createElement('canvas');
+    cvs.setAttribute('width', width);
+    cvs.setAttribute('height', height);
+    const ctx = cvs.getContext('2d');
+
+    // canvasに描画(背景は透過)
+    ctx.drawImage(im, 0, 0, width, height);
+    const imgUrl = cvs.toDataURL('image/png');
+
+    // a要素を作ってダウンロード
+    const a = document.createElement('a');
+    a.href = imgUrl;
+    a.download = `MyPng.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(svgUrl);
+    URL.revokeObjectURL(imgUrl);
+  });
+
+  // Imageオブジェクトを、svgデータから作成
+  im.src = svgUrl;
+}
+  </script>
+</body>
+</html>
