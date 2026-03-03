@@ -12,10 +12,20 @@ const FLASHCARDS = [
     title:   '家庭基礎 社会保障制度 + 民法',
     subject: '家庭基礎',
     tags:    ['期末対策', '社会保障', '民法'],
-    count:   30,
+    count:   64,
     url:     'flashcard.html?slug=home-3-exam',
     color:   '#2d6a4f',
     updated: '2026-03-02',
+  },
+    {
+    id:      'home-2-exam',
+    title:   '家庭基礎 食事と栄養・食品衛生',
+    subject: '家庭基礎',
+    tags:    ['期末対策', '栄養', '5大栄養素', '食中毒'],
+    count:   70,
+    url:     'flashcard.html?slug=home-2-exam',
+    color:   '#0891b2',
+    updated: '2026-03-03',
   },
 
   // ── テンプレート（コピーして使う）────────────

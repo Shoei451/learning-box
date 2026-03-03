@@ -79,11 +79,11 @@ function applyMeta() {
 function initApp() {
   // CARDS を内部形式に正規化
   // slug.js 側のフィールド: category, q, a, sub, image_url
-  // label は category と同じ（上書き可）
+  //label廃止
   allCards = CARDS.map((c, i) => ({
     id:        i,
     category:  c.category || 'default',
-    label:     c.label    || c.category || 'default',
+    //label:     c.label    || c.category || 'default',
     type:      c.type     || '',
     q:         c.q,
     a:         c.a,
