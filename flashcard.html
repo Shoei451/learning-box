@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>フラッシュカード — 451</title>
+  <title>Flashcards — 451 Learning box</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/flashcard-style.css">
@@ -14,8 +14,8 @@
 <header class="site-header">
   <div class="header-inner">
     <div class="header-left">
-      <a href="index.html" class="header-back">← 一覧</a>
-      <span class="header-title" id="headerTitle">フラッシュカード</span>
+      <a href="index.html" class="header-back">Back to Home</a>
+      <span class="header-title" id="headerTitle">Flashcards</span>
       <span class="header-sub"   id="headerSub"></span>
     </div>
     <div class="header-right">
@@ -36,7 +36,7 @@
 <div class="error-screen" id="errorScreen" style="display:none">
   <p class="error-icon">⚠</p>
   <p id="errorMsg">カードデータを読み込めませんでした</p>
-  <a href="index.html" class="btn-secondary" style="margin-top:1rem">← 一覧に戻る</a>
+  <a href="index.html" class="btn-secondary" style="margin-top:1rem">Back to Home</a>
 </div>
 
 <!-- START OVERLAY -->
@@ -63,7 +63,7 @@
       </select>
     </div>
     <p class="start-meta" id="startMeta"></p>
-    <button class="btn-primary start-btn" onclick="startStudy()">スタート →</button>
+    <button class="btn-primary start-btn" onclick="startStudy()">Tap to Start</button>
   </div>
 </div>
 
@@ -87,10 +87,10 @@
           <div class="card-face-inner">
             <div class="face-top">
               <span class="face-badge" id="frontBadge"></span>
-              <span class="face-hint">タップ / <kbd>Space</kbd> で答えを確認</span>
+              <span class="face-hint">Tap / <kbd>Space</kbd> to reveal answer</span>
             </div>
             <p class="card-question" id="cardQuestion"></p>
-            <span class="card-watermark">問</span>
+            <span class="card-watermark">Question</span>
           </div>
         </div>
         <div class="card-face card-back" id="cardBack">
@@ -101,7 +101,7 @@
             <p class="card-answer" id="cardAnswer"></p>
             <p class="card-sub"   id="cardSub"></p>
             <img id="cardImg" class="card-img" src="" alt="" style="display:none">
-            <span class="card-watermark back-wm">答</span>
+            <span class="card-watermark back-wm">Answer</span>
           </div>
         </div>
       </div>

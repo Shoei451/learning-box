@@ -1,22 +1,15 @@
 // ══════════════════════════════════════════════
-// note-app.js
-// URLパラメータ ?slug=xxx から notes/{slug}/meta.js を
-// 動的に <script> 挿入して UNITS を読み込み、初期化する
-//
-// notes/{slug}/meta.js が定義するグローバル変数:
-//   UNITS      (必須) — Unit定義の配列
-//   NOTE_META  (任意) — { title, subject }
+// note-app.js  v2
+// - buildNav() に nav-title-block を注入
+//   （モバイルでは unit-nav 上部にタイトルを表示）
 // ══════════════════════════════════════════════
 
-// ── state ──
 let UNITS          = [];
 let currentUnitIdx = 0;
 let currentTab     = 'summary';
 const mdCache      = {};
 
-// ── slug読み込み ──────────────────────────────
 const _slug = new URLSearchParams(location.search).get('slug');
-
 if (!_slug) {
   showSlugError('URLに ?slug=xxx が指定されていません');
 } else {
@@ -27,12 +20,6 @@ function loadSlug(slug) {
   const script  = document.createElement('script');
   script.src    = `notes/${slug}/meta.js`;
   script.onload = () => {
-    if (typeof window._UNITS === 'undefined' && typeof UNITS_DATA === 'undefined') {
-      // フォールバック: グローバル UNITS をそのまま探す
-      // meta.js は必ず UNITS_DATA か _UNITS をグローバルに定義すること
-    }
-    // meta.js は UNITS_DATA という名前でエクスポートする
-    // （app.js 側の UNITS と衝突しないようにするため）
     if (typeof UNITS_DATA === 'undefined') {
       showSlugError(`notes/${slug}/meta.js に UNITS_DATA が定義されていません`);
       return;
@@ -48,7 +35,6 @@ function loadSlug(slug) {
   document.head.appendChild(script);
 }
 
-// ── slug loading/error UI ──────────────────────
 function hideSlugLoading() {
   document.getElementById('slugLoading').style.display = 'none';
   document.getElementById('main').style.display        = '';
@@ -59,15 +45,17 @@ function showSlugError(msg) {
   document.getElementById('slugErrorMsg').textContent   = msg;
 }
 
-// ── メタ情報をHTMLに反映 ──────────────────────
-// NOTE_META = { title, subject } を meta.js で定義する（任意）
 function applyMeta(slug) {
   const meta    = (typeof NOTE_META !== 'undefined') ? NOTE_META : {};
   const title   = meta.title   || slug;
   const subject = meta.subject || '';
 
-  document.title = `${title} — まとめノート`;
+  document.title = `${title} summary note — 451 Learning box`;
+  // デスクトップ用ヘッダータイトル（class="header-title--desktop"）
   document.getElementById('headerTitle').textContent = title;
+  // サブテキスト
+  const sub = document.getElementById('headerSub');
+  if (sub) sub.textContent = subject;
 }
 
 // ══════════════════════════════════════════════
@@ -92,7 +80,20 @@ function initApp() {
 // ══════════════════════════════════════════════
 function buildNav() {
   const sidebar = document.getElementById('unitNav');
-  sidebar.innerHTML = `
+
+  // タイトル取得（NOTE_META から）
+  const meta  = (typeof NOTE_META !== 'undefined') ? NOTE_META : {};
+  const title = meta.title || _slug || 'まとめノート';
+
+  // ── nav-title-block: CSS で display:none (desktop) / flex (mobile) ──
+  const titleBlock = `
+    <div class="nav-title-block" id="navTitleBlock">
+      <span class="nav-title-block__text">${escHtml(title)}</span>
+      <button class="nav-title-block__close" onclick="closeNav()" aria-label="閉じる">✕</button>
+    </div>
+  `;
+
+  sidebar.innerHTML = titleBlock + `
     <p class="nav-section-label">Units</p>
     ${UNITS.map((u, i) => `
       <button class="nav-unit-btn" id="nav-${u.id}" onclick="navTo(${i})"
@@ -108,10 +109,17 @@ function buildNav() {
   const overlay = document.getElementById('navOverlay');
   toggle.addEventListener('click', () => document.body.classList.toggle('nav-open'));
   overlay.addEventListener('click', () => document.body.classList.remove('nav-open'));
+
+  // unit ボタンをタップしたらモバイルでは閉じる
   sidebar.addEventListener('click', e => {
     if (e.target.closest('.nav-unit-btn') && window.innerWidth <= 768)
       document.body.classList.remove('nav-open');
   });
+}
+
+// nav-title-block の ✕ ボタン用
+function closeNav() {
+  document.body.classList.remove('nav-open');
 }
 
 function navTo(idx) { navigateTo(idx); }
@@ -161,9 +169,7 @@ async function switchTab(tab) {
 }
 
 // ══════════════════════════════════════════════
-// SUMMARY — Markdownをfetchしてレンダリング
-// file パスは meta.js の UNITS_DATA[i].file に書く
-// 例: 'notes/katei/01.md'  ← ルートからの相対パス
+// SUMMARY
 // ══════════════════════════════════════════════
 async function loadSummary(unit) {
   const body    = document.getElementById('panelSummary');
@@ -220,7 +226,6 @@ function renderQuiz(unit) {
   document.getElementById('errorState').style.display   = 'none';
 
   const wrap = document.getElementById('quizWrap');
-
   if (!questions.length) {
     wrap.innerHTML = `<p class="quiz-empty">このUnitにはクイズがありません。</p>`;
     document.getElementById('quizScore').textContent          = '';
@@ -242,7 +247,6 @@ function renderQuiz(unit) {
         (hint ? `<span class="hint-icon" title="${escHtml(hint)}">?</span>` : '') +
         `</span>`;
     });
-
     return `<div class="q-item" id="qitem-${qi}">
       <div class="q-label">Q${qi + 1}</div>
       <div class="q-text">${qHtml}</div>
@@ -313,7 +317,6 @@ function checkQuiz() {
 
     item.classList.toggle('all-correct', qAllCorrect);
     item.classList.toggle('has-wrong',  !qAllCorrect);
-
     if (qAllCorrect) {
       fb.className = 'q-feedback fb-ok'; fb.textContent = '✓ 正解';
     } else {

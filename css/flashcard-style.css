@@ -1,5 +1,8 @@
 /* ══════════════════════════════════════
-   style.css — フラッシュカード v2
+   flashcard-style.css — v2
+   - type-pip スタイルを完全削除
+   - header-back をモバイルでも表示
+   - ナビボタンのタッチターゲット拡大
    ══════════════════════════════════════ */
 
 /* ── Design tokens ───────────────────── */
@@ -70,20 +73,29 @@ kbd {
 }
 .header-inner {
   max-width: 800px; margin: 0 auto;
-  height: 100%; padding: 0 1.25rem;
+  height: 100%; padding: 0 1rem;
   display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
 }
 .header-left {
-  display: flex; align-items: center; gap: 0.6rem; min-width: 0;
+  display: flex; align-items: center; gap: 0.5rem; min-width: 0;
 }
+
+/* ── header-back: モバイルでも常に表示、タッチターゲット十分に ── */
 .header-back {
+  display: inline-flex; align-items: center; gap: 0.25rem;
   font-family: var(--font-mono); font-size: 0.72rem;
   color: var(--color-text-secondary); text-decoration: none;
-  padding: 0.2rem 0.55rem; border-radius: 100px;
+  padding: 0.35rem 0.7rem;
+  min-height: 34px; /* タッチターゲット */
+  border-radius: 100px;
   border: 1px solid var(--color-border); background: var(--color-surface);
   white-space: nowrap; transition: all 0.15s; flex-shrink: 0;
 }
-.header-back:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.header-back:hover,
+.header-back:focus-visible {
+  border-color: var(--color-accent); color: var(--color-accent);
+  background: var(--color-accent-light);
+}
 
 /* ── loading / error ── */
 .loading-screen, .error-screen {
@@ -100,14 +112,15 @@ kbd {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .error-icon { font-size: 2rem; }
+
 .header-title {
   font-family: var(--font-display);
-  font-size: 0.95rem; font-weight: 700;
+  font-size: 0.92rem; font-weight: 700;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .header-sub {
   font-family: var(--font-mono);
-  font-size: 0.7rem; color: var(--color-text-secondary);
+  font-size: 0.68rem; color: var(--color-text-secondary);
   white-space: nowrap;
 }
 .header-right {
@@ -124,6 +137,7 @@ kbd {
 }
 .h-tab {
   padding: 0.28rem 0.85rem;
+  min-height: 30px;
   border: none; background: transparent;
   border-radius: 4px;
   font-family: var(--font-sans); font-size: 0.8rem;
@@ -137,7 +151,10 @@ kbd {
 }
 
 .btn-icon {
-  padding: 0.28rem 0.75rem; border-radius: 100px;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.35rem 0.85rem;
+  min-height: 34px;
+  border-radius: 100px;
   border: 1px solid var(--color-border); background: var(--color-surface);
   font-family: var(--font-mono); font-size: 0.74rem;
   color: var(--color-text-secondary); cursor: pointer;
@@ -265,10 +282,11 @@ kbd {
 .m-dot.forgot { background: var(--color-forgot); }
 .m-dot.current { background: var(--color-text-primary); box-shadow: 0 0 0 2px rgba(26,26,26,0.18); }
 
+/* ナビボタン — タッチターゲット確保のため44px以上に */
 .nav-btn {
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   border: 1px solid var(--color-border); background: var(--color-surface);
-  font-size: 1.3rem; color: var(--color-text-secondary);
+  font-size: 1.4rem; color: var(--color-text-secondary);
   cursor: pointer; transition: all 0.15s; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   box-shadow: var(--shadow-card);
@@ -383,12 +401,13 @@ kbd {
 ══════════════════════════════════════ */
 .mastery-row { display: flex; gap: 0.6rem; width: 100%; }
 .mastery-btn {
-  flex: 1; padding: 0.65rem 0.5rem; border-radius: var(--radius-sm);
+  flex: 1; padding: 0.7rem 0.5rem; border-radius: var(--radius-sm);
   border: 1px solid var(--color-border); background: var(--color-surface);
   cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   opacity: 0.3; pointer-events: none; transform: translateY(4px);
   transition: opacity 0.2s, transform 0.2s, background 0.15s;
+  min-height: 56px; /* タッチターゲット */
 }
 .mastery-btn.active { opacity: 1; pointer-events: all; transform: translateY(0); }
 .m-icon { font-size: 1.1rem; line-height: 1; }
@@ -410,118 +429,6 @@ kbd {
 .m-knew.active:hover .m-icon, .m-knew.active:hover .m-label { color: white; }
 
 .kb-hint { font-size: 0.68rem; color: var(--color-text-secondary); text-align: center; line-height: 1.8; }
-
-/* ══════════════════════════════════════
-   EDITOR MODE
-══════════════════════════════════════ */
-.editor-wrap {
-  max-width: 680px; margin: 0 auto;
-  padding: 2rem 1.25rem 4rem;
-  display: flex; flex-direction: column; gap: 1.5rem;
-}
-.editor-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 1.4rem 1.5rem;
-}
-.section-title {
-  font-family: var(--font-display); font-size: 0.95rem; font-weight: 700;
-  margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
-}
-.section-count { font-size: 0.78rem; color: var(--color-text-secondary); font-weight: 400; }
-.section-desc { font-size: 0.82rem; color: var(--color-text-secondary); margin-bottom: 0.85rem; line-height: 1.7; }
-.section-desc code {
-  font-family: var(--font-mono); font-size: 0.78em;
-  background: var(--color-accent-light); color: var(--color-accent);
-  padding: 0.1em 0.4em; border-radius: 3px;
-}
-
-/* Supabase ステータス */
-.sb-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-.sb-status { font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-text-secondary); }
-.sb-status.ok  { color: var(--color-knew); }
-.sb-status.err { color: var(--color-forgot); }
-
-/* スキーマボックス */
-.schema-box {
-  background: var(--color-bg); border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm); overflow: hidden;
-}
-.schema-label {
-  padding: 0.3rem 0.8rem; font-family: var(--font-mono);
-  font-size: 0.68rem; letter-spacing: 0.08em;
-  color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border);
-}
-.schema-sql {
-  padding: 0.75rem 1rem; font-family: var(--font-mono);
-  font-size: 0.75rem; line-height: 1.7;
-  color: var(--color-text-primary); overflow-x: auto;
-}
-
-/* フォーム */
-.q-form { display: flex; flex-direction: column; gap: 0.85rem; }
-.form-row { display: flex; flex-direction: column; gap: 0.3rem; }
-.form-row label { font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary); letter-spacing: 0.05em; }
-.form-row input,
-.form-row textarea {
-  width: 100%; padding: 0.55rem 0.75rem;
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  font-family: var(--font-sans); font-size: 0.88rem;
-  background: var(--color-bg); color: var(--color-text-primary);
-  outline: none; transition: border-color 0.15s; resize: vertical;
-}
-.form-row input:focus,
-.form-row textarea:focus { border-color: var(--color-accent); background: white; }
-.form-row textarea { min-height: 72px; }
-.form-btns { display: flex; gap: 0.5rem; justify-content: flex-end; padding-top: 0.25rem; }
-
-/* 画像プレビュー */
-.image-preview { margin-top: 0.5rem; }
-.image-preview img { max-height: 120px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
-
-/* CSV */
-.import-area { margin-bottom: 0.6rem; }
-.export-row { display: flex; gap: 0.5rem; }
-
-/* 問題一覧 */
-.q-list { display: flex; flex-direction: column; gap: 0.6rem; }
-.q-list-search {
-  width: 100%; padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  font-family: var(--font-sans); font-size: 0.85rem;
-  background: var(--color-bg); color: var(--color-text-primary);
-  outline: none; margin-bottom: 0.6rem; transition: border-color 0.15s;
-}
-.q-list-search:focus { border-color: var(--color-accent); background: white; }
-.qlist-over {
-  font-size: 0.78rem; color: var(--color-text-secondary);
-  text-align: center; padding: 0.75rem 0;
-  border-top: 1px dashed var(--color-border); margin-top: 0.25rem;
-}
-.q-list-item {
-  background: var(--color-bg); border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm); padding: 0.75rem 1rem;
-}
-.qli-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
-.qli-cat {
-  font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em;
-  background: var(--color-accent-light); color: var(--color-accent);
-  padding: 0.1rem 0.5rem; border-radius: 100px;
-}
-.qli-id { font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-text-secondary); }
-.qli-q { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.15rem; line-height: 1.5; }
-.qli-a { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
-.qli-actions { display: flex; gap: 0.4rem; }
-.btn-ghost-sm {
-  padding: 0.25rem 0.7rem; font-size: 0.72rem;
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  background: var(--color-surface); color: var(--color-text-secondary);
-  cursor: pointer; transition: all 0.13s;
-}
-.btn-ghost-sm:hover { background: var(--color-bg); color: var(--color-text-primary); }
-.btn-ghost-sm.danger { border-color: rgba(192,57,43,0.3); color: var(--color-forgot); }
-.btn-ghost-sm.danger:hover { background: var(--color-forgot); color: white; border-color: var(--color-forgot); }
 
 /* ══════════════════════════════════════
    COMPLETE OVERLAY
@@ -587,6 +494,7 @@ kbd {
   writing-mode: vertical-lr; font-size: 0.7rem; letter-spacing: 0.15em;
   display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
   transition: background 0.15s;
+  min-width: 28px; /* タッチ幅 */
 }
 .list-toggle:hover { background: #235e44; }
 #listArrow { writing-mode: horizontal-tb; font-size: 1rem; line-height: 1; }
@@ -607,7 +515,8 @@ kbd {
 }
 .list-close {
   background: none; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  padding: 0.2rem 0.6rem; font-size: 0.68rem; color: var(--color-text-secondary); cursor: pointer;
+  padding: 0.25rem 0.7rem; min-height: 30px;
+  font-size: 0.68rem; color: var(--color-text-secondary); cursor: pointer;
   transition: background 0.13s;
 }
 .list-close:hover { background: var(--color-border); }
@@ -618,6 +527,7 @@ kbd {
   display: flex; align-items: flex-start; gap: 0.5rem;
   border: 1px solid transparent; transition: background 0.12s;
   color: var(--color-text-primary);
+  min-height: 40px; /* タッチターゲット */
 }
 .list-item:hover { background: var(--color-bg); }
 .list-item.current { background: var(--color-accent-light); border-color: rgba(45,106,79,0.3); }
@@ -668,14 +578,14 @@ kbd {
 ══════════════════════════════════════ */
 @media (max-width: 520px) {
   .card-scene  { aspect-ratio: 3/2; }
-  .mastery-btn { padding: 0.55rem 0.35rem; }
+  .mastery-btn { padding: 0.6rem 0.35rem; }
   .m-label     { font-size: 0.62rem; }
   .kb-hint     { display: none; }
-  .header-sub  { display: none; }
+  /* header-back はモバイルでも維持 — display:none 削除 */
+  .header-sub  { display: none; } /* subテキストのみ非表示 */
+  .header-title { font-size: 0.82rem; max-width: 30vw; }
   .complete-card { padding: 1.75rem 1.25rem; }
-  /* タブはそのまま残す — USE_SUPABASE=false 時は editor タブが非表示なので
-     学習タブのみ表示されても問題ない */
   .header-tabs .h-tab { padding: 0.28rem 0.65rem; font-size: 0.75rem; }
-  .btn-icon { padding: 0.28rem 0.5rem; font-size: 0.7rem; }
-  #shuffleLabel { display: none; }  /* "shuffle" 文字を隠してアイコンだけに */
+  .btn-icon { padding: 0.32rem 0.55rem; font-size: 0.7rem; }
+  #shuffleLabel { display: none; }
 }

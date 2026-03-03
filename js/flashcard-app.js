@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════
-// flashcard-app.js
-// URLパラメータ ?slug=xxx から flashcards/{slug}.js を
-// 動的に <script> 挿入して読み込み、初期化する
+// flashcard-app.js  v2
+// - type / type-pip を完全廃止
+// - シャッフルON/OFF を進行中デッキにも即反映
 // ══════════════════════════════════════════════
 
 const SWAP_OUT_MS = 130;
@@ -32,8 +32,6 @@ function loadSlug(slug) {
   const script  = document.createElement('script');
   script.src    = `flashcards/${slug}.js`;
   script.onload = () => {
-    // flashcards/{slug}.js が
-    // CARDS, CATEGORY_STYLES, FILTER_DEFS, DECK_META をグローバルに定義している前提
     if (typeof CARDS === 'undefined') {
       showError(`flashcards/${slug}.js に CARDS が定義されていません`);
       return;
@@ -59,13 +57,12 @@ function showError(msg) {
 }
 
 // ── メタ情報をHTMLに反映 ──────────────────────
-// DECK_META = { title, subject } を flashcards/{slug}.js で定義する（任意）
 function applyMeta() {
   const meta    = (typeof DECK_META !== 'undefined') ? DECK_META : {};
   const title   = meta.title   || _slug;
   const subject = meta.subject || '';
 
-  document.title = `${title} — フラッシュカード`;
+  document.title = `${title} Flashcards - 451 Learning box`;
   document.getElementById('headerTitle').textContent  = title;
   document.getElementById('headerSub').textContent    = subject;
   document.getElementById('startTitle').textContent   = title;
@@ -77,20 +74,16 @@ function applyMeta() {
 // INIT
 // ══════════════════════════════════════════════
 function initApp() {
-  // CARDS を内部形式に正規化
-  // slug.js 側のフィールド: category, q, a, sub, image_url
-  // label は category と同じ（上書き可）
+  // CARDS を内部形式に正規化（type フィールドを除去）
   allCards = CARDS.map((c, i) => ({
     id:        i,
     category:  c.category || 'default',
     label:     c.label    || c.category || 'default',
-    //type:      c.type     || '',
     q:         c.q,
     a:         c.a,
     sub:       c.sub       || '',
     image_url: c.image_url || '',
   }));
-
 
   buildFilters();
   updateStartMeta();
@@ -105,11 +98,45 @@ function initApp() {
     selectedCount = sel.value;
   }
 
+  // ── シャッフルボタン ──
+  // 学習開始前: 次回デッキに反映
+  // 学習中    : 現在のデッキを即シャッフル（インデックスは0にリセット）
   document.getElementById('shuffleBtn').addEventListener('click', () => {
     shuffleOn = !shuffleOn;
     document.getElementById('shuffleBtn').classList.toggle('active', shuffleOn);
     document.getElementById('shuffleLabel').textContent = shuffleOn ? 'on' : 'shuffle';
-    showToast(shuffleOn ? 'シャッフル: ON' : 'シャッフル: OFF');
+
+    // startOverlay が非表示 = 学習進行中
+    const inProgress = document.getElementById('startOverlay').classList.contains('hidden') &&
+                       document.getElementById('completeOverlay').style.display === 'none';
+
+    if (inProgress && deck.length > 1) {
+      if (shuffleOn) {
+        // 現在のカードを先頭に保持しつつ残りをシャッフル
+        const current = deck[deckIdx];
+        const rest    = shuffle(deck.filter((_, i) => i !== deckIdx));
+        deck          = [current, ...rest];
+        deckIdx       = 0;
+      } else {
+        // シャッフル解除: 元の allCards 順に並び直してから現在位置を探す
+        const currentCard = deck[deckIdx];
+        const defs        = getFilterDefs();
+        const filter      = defs.find(f => f.id === selectedFilterId) || defs[0];
+        let pool          = allCards.filter(filter.match);
+        if (selectedCount !== 'all') {
+          pool = pool.slice(0, Math.min(Number(selectedCount), pool.length));
+        }
+        deck   = pool;
+        deckIdx = deck.findIndex(c => c.id === currentCard.id);
+        if (deckIdx < 0) deckIdx = 0;
+      }
+      renderCard();
+      renderDots();
+      renderList();
+      showToast(shuffleOn ? 'シャッフル: ON（デッキを再構成）' : 'シャッフル: OFF（元の順に戻しました）');
+    } else {
+      showToast(shuffleOn ? 'シャッフル: ON' : 'シャッフル: OFF');
+    }
   });
 
   document.addEventListener('keydown', e => {
@@ -127,8 +154,6 @@ function initApp() {
 
 // ══════════════════════════════════════════════
 // FILTERS
-// buildFilters() は FILTER_DEFS（slug.js で定義）があればそれを使う。
-// なければ category から自動生成する。
 // ══════════════════════════════════════════════
 function buildFilters() {
   const defs = getFilterDefs();
@@ -146,11 +171,7 @@ function buildFilters() {
 }
 
 function getFilterDefs() {
-  // slug.js 側で FILTER_DEFS を定義していればそちらを優先
-  if (typeof FILTER_DEFS !== 'undefined' && FILTER_DEFS.length) {
-    return FILTER_DEFS;
-  }
-  // なければ category から自動生成
+  if (typeof FILTER_DEFS !== 'undefined' && FILTER_DEFS.length) return FILTER_DEFS;
   const cats = [...new Set(allCards.map(c => c.category))];
   return [
     { id: 'all', label: 'すべて', match: () => true },
@@ -248,19 +269,13 @@ function renderCard() {
     return;
   }
 
-  const card  = deck[deckIdx];
+  const card   = deck[deckIdx];
   const styles = (typeof CATEGORY_STYLES !== 'undefined') ? CATEGORY_STYLES : {};
-  const col   = styles[card.category] || styles.default || { text:'#2d6a4f', bg:'#e8f5e9', card:'#2d6a4f' };
+  const col    = styles[card.category] || styles.default || { text:'#2d6a4f', bg:'#e8f5e9', card:'#2d6a4f' };
 
-  // フロントバッジ
-  // type が定義されていれば "label ｜ type" 形式、なければ label だけ
-  const fb = document.getElementById('frontBadge');
-  if (card.type) {
-    const typeLabel = { name:'制度名', detail:'数値・内容', ox:'○×' }[card.type] || card.type;
-    fb.innerHTML    = `${escHtml(card.label)}<span class="type-pip ${card.type}">${typeLabel}</span>`;
-  } else {
-    fb.textContent  = card.label;
-  }
+  // フロントバッジ（label のみ、type廃止）
+  const fb        = document.getElementById('frontBadge');
+  fb.textContent  = card.label;
   fb.style.color      = col.text;
   fb.style.background = col.bg;
   fb.style.border     = `1px solid ${col.text}33`;
@@ -294,23 +309,6 @@ function renderCard() {
 function updateProgress(ratio) {
   document.getElementById('progressFill').style.width = (ratio * 100) + '%';
 }
-
-// ── type-pip CSS（slug.jsにtype定義があるとき動的に注入）──
-// flashcard-style.css に含めてもよいが、type使わないデッキでは不要なので動的追加
-(function injectTypePipStyle() {
-  const s = document.createElement('style');
-  s.textContent = `
-    .type-pip {
-      font-family: var(--font-mono); font-size: 0.6rem;
-      padding: 0.1rem 0.45rem; border-radius: 100px;
-      margin-left: 0.3rem; vertical-align: middle; font-weight: 600;
-    }
-    .type-pip.name   { background: #e8f5e9; color: #2d6a4f; }
-    .type-pip.detail { background: #fef3c7; color: #b45309; }
-    .type-pip.ox     { background: #f3e8ff; color: #7c3aed; }
-  `;
-  document.head.appendChild(s);
-})();
 
 // ══════════════════════════════════════════════
 // FLIP
@@ -379,7 +377,7 @@ function jumpTo(idx) {
 // ══════════════════════════════════════════════
 function markCard(level) {
   if (!isFlipped || !deck.length || isTransitioning) return;
-  mastery[deckIdx] = level;
+  mastery[deck[deckIdx].id] = level;
   renderDots();
   renderList();
 
@@ -402,8 +400,8 @@ function markCard(level) {
 function renderDots() {
   const row = document.getElementById('masteryDots');
   if (!deck.length || deck.length > 60) { row.innerHTML = ''; return; }
-  row.innerHTML = deck.map((_, i) => {
-    const m = mastery[i] || '';
+  row.innerHTML = deck.map((card, i) => {
+    const m = mastery[card.id] || '';
     return `<div class="m-dot ${m} ${i === deckIdx ? 'current' : ''}"></div>`;
   }).join('');
 }
@@ -425,13 +423,12 @@ function showComplete() {
     ${skip > 0 ? `<div class="stat-pill"><span class="sp-n">${skip}</span><span class="sp-l">未確認</span></div>` : ''}
   `;
 
-  // カテゴリ別内訳
   const catMap = {};
   deck.forEach((card, i) => {
     const key = card.category;
     if (!catMap[key]) catMap[key] = { label: card.label, knew: 0, total: 0 };
     catMap[key].total++;
-    if (mastery[i] === 'knew') catMap[key].knew++;
+    if (mastery[card.id] === 'knew') catMap[key].knew++;
   });
   document.getElementById('completeBreakdown').innerHTML =
     Object.values(catMap).map(c => {
@@ -448,11 +445,13 @@ function showComplete() {
 
 function reviewWeak() {
   document.getElementById('completeOverlay').style.display = 'none';
-  const weak = deck.filter((_, i) => mastery[i] !== 'knew');
+  const weak = deck.filter(card => mastery[card.id] !== 'knew');
   if (!weak.length) { showToast('すべて「わかった」です！'); restartDeck(); return; }
-  deck      = shuffle(weak);
-  deckIdx   = 0;
-  mastery   = {};
+  deck    = shuffle(weak);
+  deckIdx = 0;
+  // mastery は card.id キーなのでリセット不要 — 既存の結果を引き継ぐ
+  // 「わからない」「あやふや」のマークはリセットして再挑戦
+  weak.forEach(card => { delete mastery[card.id]; });
   renderCard(); renderDots(); renderList();
 }
 
@@ -475,7 +474,7 @@ function renderList() {
   if (!body || !deck.length) { if (body) body.innerHTML = ''; return; }
 
   body.innerHTML = deck.map((card, i) => {
-    const m   = mastery[i] || '';
+    const m   = mastery[card.id] || '';
     const txt = card.q.length > 36
       ? card.q.slice(0, 36).replace(/\n/g, ' ') + '…'
       : card.q.replace(/\n/g, ' ');
