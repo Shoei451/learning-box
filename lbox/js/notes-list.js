@@ -17,6 +17,16 @@ const NOTES = [
     color:   '#2d6a4f',
     updated: '2026-03-03',
   },
+   {
+    id:      'home-2-exam',
+    title:   '家庭基礎 2学期期末テスト対策',
+    subject: '家庭基礎',
+    tags:    ['期末対策', '5大栄養素', '炭水化物', '脂質', 'たんぱく質', '食中毒'],
+    units:   8,
+    url:     'note.html?slug=home-2-exam',
+    color:   '#0891b2',
+    updated: '2026-03-03',
+  },
 
   // ── テンプレート（コピーして使う）────────────
   // {
