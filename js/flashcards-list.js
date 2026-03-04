@@ -17,7 +17,7 @@ const FLASHCARDS = [
     color:   '#2d6a4f',
     updated: '2026-03-02',
   },
-    {
+  {
     id:      'home-2-exam',
     title:   '家庭基礎 食事と栄養・食品衛生',
     subject: '家庭基礎',
@@ -27,6 +27,16 @@ const FLASHCARDS = [
     color:   '#0891b2',
     updated: '2026-03-03',
   },
+  {
+    id:      'geo-3-exam',
+    title:   '地理総合 宗教文化・日本の気候・防災',
+    subject: '地理B',
+    tags:    ['期末対策', '地理', '宗教', '気候', '防災'],
+    count:   64,
+    url:     'flashcard.html?slug=geo-3-exam',
+    color:   '#d2dd32',
+    updated: '2026-03-04',
+  }
 
   // ── テンプレート（コピーして使う）────────────
   // {
