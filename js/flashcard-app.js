@@ -216,11 +216,13 @@ function openStartScreen() {
   mastery = {};
   document.getElementById('startOverlay').classList.remove('hidden');
   document.getElementById('completeOverlay').style.display = 'none';
+  document.getElementById('shuffleBtn').style.display = '';
   updateStartMeta();
 }
 
 function startStudy() {
   document.getElementById('startOverlay').classList.add('hidden');
+  document.getElementById('shuffleBtn').style.display = 'none';
   mastery = {};
   buildDeck();
 }
