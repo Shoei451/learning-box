@@ -30,7 +30,7 @@ const FLASHCARDS = [
   {
     id:      'geo-3-exam',
     title:   '地理総合 宗教文化・日本の気候・防災',
-    subject: '地理B',
+    subject: '地理総合',
     tags:    ['期末対策', '地理', '宗教', '気候', '防災'],
     count:   64,
     url:     'flashcard.html?slug=geo-3-exam',
