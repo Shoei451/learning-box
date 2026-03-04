@@ -209,103 +209,166 @@ function reloadUnit() {
 }
 
 function updateUnitMeta(unit) {
-  const el  = document.getElementById('unitProgress');
-  const md  = mdCache[unit.file] || '';
-  const cnt = (md.match(/⟦⟦[\s\S]*?⟧⟧/g) || []).length;
-  el.textContent = cnt > 0 ? `穴埋め ${cnt}語` : '';
+  const el    = document.getElementById('unitProgress');
+  const total = (unit.quiz || []).reduce((s, q) => s + q.blanks.length, 0);
+  el.textContent = total > 0 ? `穴埋め ${total}問` : '';
 }
 
 // ══════════════════════════════════════════════
-// QUIZ（トグル方式）
+// QUIZ
 // ══════════════════════════════════════════════
-async function renderQuiz(unit) {
+function renderQuiz(unit) {
+  const questions = unit.quiz || [];
   document.getElementById('panelQuiz').style.display    = 'block';
   document.getElementById('panelSummary').style.display = 'none';
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('errorState').style.display   = 'none';
 
   const wrap = document.getElementById('quizWrap');
-
-  // MD をキャッシュから取得（なければfetch）
-  let md = mdCache[unit.file];
-  if (!md) {
-    try {
-      const res = await fetch(unit.file);
-      if (!res.ok) throw new Error(`${res.status}`);
-      md = await res.text();
-      mdCache[unit.file] = md;
-    } catch(e) {
-      wrap.innerHTML = `<p class="quiz-empty">MDの読み込みに失敗しました: ${e.message}</p>`;
-      return;
-    }
-  }
-
-  // ⟦⟦…⟧⟧ をプレースホルダに置換してからmarked → スパンに戻す
-  const ph = [];
-  const escaped = md.replace(/⟦⟦([\s\S]*?)⟧⟧/g, (_, t) => {
-    ph.push(t);
-    return `CLZPH_${ph.length - 1}_END`;
-  });
-
-  if (!ph.length) {
-    wrap.innerHTML = `<p class="quiz-empty">このUnitには穴埋め（⟦⟦…⟧⟧）がありません。</p>`;
-    updateClozeCount();
+  if (!questions.length) {
+    wrap.innerHTML = `<p class="quiz-empty">このUnitにはクイズがありません。</p>`;
+    document.getElementById('quizScore').textContent          = '';
+    document.getElementById('quizProgressFill').style.width   = '0%';
     return;
   }
 
-  let html = marked.parse(escaped);
-  html = html.replace(/CLZPH_(\d+)_END/g, (_, i) => {
-    const text = escHtml(ph[+i]);
-    return `<span class="cloze-word cloze-hidden" onclick="toggleCloze(this)" data-answer="${text}">${text}</span>`;
+  wrap.innerHTML = questions.map((q, qi) => {
+    let blankIdx = 0;
+    const qHtml  = escHtml(q.q).replace(/___/g, () => {
+      const bi     = blankIdx;
+      const answer = q.blanks[bi] || '';
+      const hint   = (q.hints && q.hints[bi]) ? q.hints[bi] : '';
+      blankIdx++;
+      return `<span class="blank-wrapper">` +
+        `<input class="blank" data-qi="${qi}" data-bi="${bi}"` +
+        ` data-answer="${escHtml(answer)}"` +
+        ` placeholder="${'　'.repeat(Math.max(2, Math.ceil(answer.length * 1.2)))}">` +
+        (hint ? `<span class="hint-icon" title="${escHtml(hint)}">?</span>` : '') +
+        `</span>`;
+    });
+    return `<div class="q-item" id="qitem-${qi}">
+      <div class="q-label">Q${qi + 1}</div>
+      <div class="q-text">${qHtml}</div>
+      <div class="q-feedback" id="qfb-${qi}"></div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.blank').forEach(b => {
+    fitBlank(b);
+    b.addEventListener('input',   () => { fitBlank(b); updateQuizProgress(); });
+    b.addEventListener('keydown', e => { if (e.key === 'Enter') focusNextBlank(b); });
   });
 
-  wrap.innerHTML = html;
-  updateClozeCount();
+  document.getElementById('quizScore').textContent = '';
+  updateQuizProgress();
 }
 
-function toggleCloze(el) {
-  el.classList.toggle('cloze-hidden');
-  el.classList.toggle('revealed');
-  updateClozeCount();
+function fitBlank(el) {
+  let tmp = document.getElementById('_fitBlankTmp');
+  if (!tmp) {
+    tmp = document.createElement('span');
+    tmp.id = '_fitBlankTmp';
+    tmp.style.cssText =
+      'visibility:hidden;position:absolute;pointer-events:none;' +
+      'font-family:inherit;font-size:inherit;padding:0 0.4em;white-space:pre;';
+    document.body.appendChild(tmp);
+  }
+  tmp.textContent = el.value || el.placeholder || '　　　';
+  el.style.width  = Math.max(tmp.offsetWidth + 4, 48) + 'px';
 }
 
-function revealAll() {
-  document.querySelectorAll('#quizWrap .cloze-word').forEach(el => {
-    el.classList.remove('cloze-hidden');
-    el.classList.add('revealed');
-  });
-  updateClozeCount();
+function focusNextBlank(current) {
+  const inputs = [...document.querySelectorAll('.blank')];
+  const idx    = inputs.indexOf(current);
+  if (idx >= 0 && idx < inputs.length - 1) inputs[idx + 1].focus();
 }
 
-function hideAll() {
-  document.querySelectorAll('#quizWrap .cloze-word').forEach(el => {
-    el.classList.add('cloze-hidden');
-    el.classList.remove('revealed');
-  });
-  updateClozeCount();
-}
-
-function resetQuiz() {
-  hideAll();
-  showToast('リセットしました');
-}
-
-function updateClozeCount() {
-  const all      = document.querySelectorAll('#quizWrap .cloze-word');
-  const revealed = document.querySelectorAll('#quizWrap .cloze-word.revealed');
-  const total    = all.length;
-  const done     = revealed.length;
-  const pct      = total ? Math.round(done / total * 100) : 0;
-
+function updateQuizProgress() {
+  const inputs = [...document.querySelectorAll('.blank')];
+  const filled = inputs.filter(i => i.value.trim()).length;
+  const pct    = inputs.length ? filled / inputs.length * 100 : 0;
   document.getElementById('quizProgressFill').style.width = pct + '%';
-  document.getElementById('quizScoreBig').textContent     = `${done} / ${total}`;
-
-  // nav dot: 全部表示したら完了扱い
-  const unit = UNITS[currentUnitIdx];
-  const dot  = document.getElementById(`navdot-${unit.id}`);
-  if (dot) dot.classList.toggle('done', total > 0 && done === total);
 }
 
+function checkQuiz() {
+  const unit      = UNITS[currentUnitIdx];
+  const questions = unit.quiz || [];
+  if (!questions.length) return;
+
+  let totalCorrect = 0;
+  let totalBlanks  = 0;
+
+  questions.forEach((q, qi) => {
+    const item = document.getElementById(`qitem-${qi}`);
+    const fb   = document.getElementById(`qfb-${qi}`);
+    let qAllCorrect = true;
+
+    q.blanks.forEach((ans, bi) => {
+      const inp = document.querySelector(`.blank[data-qi="${qi}"][data-bi="${bi}"]`);
+      if (!inp) return;
+      totalBlanks++;
+      const ok = normalizeAns(inp.value) === normalizeAns(ans);
+      inp.classList.toggle('correct',   ok);
+      inp.classList.toggle('incorrect', !ok);
+      if (ok) { totalCorrect++; }
+      else    { qAllCorrect = false; void inp.offsetWidth; }
+    });
+
+    item.classList.toggle('all-correct', qAllCorrect);
+    item.classList.toggle('has-wrong',  !qAllCorrect);
+    if (qAllCorrect) {
+      fb.className = 'q-feedback fb-ok'; fb.textContent = '✓ 正解';
+    } else {
+      fb.className = 'q-feedback fb-ng'; fb.textContent = '✗ 正解: ' + q.blanks.join(' ／ ');
+    }
+  });
+
+  const pct = totalBlanks ? Math.round(totalCorrect / totalBlanks * 100) : 0;
+  document.getElementById('quizScore').textContent    = `${totalCorrect} / ${totalBlanks}  (${pct}%)`;
+  document.getElementById('quizScoreBig').textContent = `${pct}%`;
+
+  const dot = document.getElementById(`navdot-${unit.id}`);
+  if (dot) dot.classList.toggle('done', pct === 100);
+
+  updateQuizProgress();
+  showToast(pct === 100 ? '🎉 全問正解！' : `${totalCorrect} / ${totalBlanks} 正解`);
+}
+
+function revealQuiz() {
+  document.querySelectorAll('.blank').forEach(b => {
+    b.value = b.dataset.answer;
+    b.classList.remove('incorrect');
+    b.classList.add('correct');
+    fitBlank(b);
+  });
+  updateQuizProgress();
+  checkQuiz();
+}
+
+function retryWrong() {
+  let firstWrong = null;
+  document.querySelectorAll('.blank').forEach(inp => {
+    if (inp.classList.contains('incorrect')) {
+      inp.value = '';
+      inp.classList.remove('incorrect');
+      fitBlank(inp);
+      if (!firstWrong) firstWrong = inp;
+    }
+  });
+  document.querySelectorAll('.q-item').forEach(item => item.classList.remove('has-wrong','all-correct'));
+  document.querySelectorAll('.q-feedback').forEach(fb => {
+    if (fb.classList.contains('fb-ng')) { fb.textContent = ''; fb.className = 'q-feedback'; }
+  });
+  document.getElementById('quizScore').textContent = '';
+  if (firstWrong) firstWrong.focus();
+  updateQuizProgress();
+}
+
+function resetQuiz() { renderQuiz(UNITS[currentUnitIdx]); }
+
+function normalizeAns(s) {
+  return (s || '').replace(/[　\s]/g,'').replace(/[、。，,・]/g,'').replace(/[（(）)]/g,'').toLowerCase();
+}
 
 // ══════════════════════════════════════════════
 // UTILS

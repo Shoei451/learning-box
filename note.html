@@ -81,8 +81,8 @@
     </div>
     <div class="quiz-header-row">
       <div class="quiz-score-display">
-        <strong id="quizScoreBig">—</strong>
-        <span>正解率</span>
+        <strong id="quizScoreBig">— / —</strong>
+        <span>表示済み</span>
       </div>
     </div>
     <div class="quiz-progress-bar">
@@ -90,13 +90,11 @@
     </div>
     <div class="quiz-wrap" id="quizWrap"></div>
     <div class="quiz-controls">
-      <button class="btn-primary" onclick="checkQuiz()">✓ 採点する</button>
-      <button class="btn-ghost"   onclick="revealQuiz()">答えを表示</button>
-      <button class="btn-ghost"   onclick="retryWrong()">✗ のみ再挑戦</button>
+      <button class="btn-primary" onclick="revealAll()">全て表示</button>
+      <button class="btn-ghost"   onclick="hideAll()">全て隠す</button>
       <button class="btn-ghost"   onclick="resetQuiz()">リセット</button>
-      <span class="quiz-score" id="quizScore"></span>
     </div>
-    <p class="quiz-kb-hint">← Enter で次の空欄へ &nbsp;|&nbsp; ヒントアイコンにホバーでヒント →</p>
+    <p class="quiz-kb-hint">語句をクリックして表示 / 再クリックで隠す</p>
   </div>
 
 </main>

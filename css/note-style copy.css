@@ -17,6 +17,11 @@
   --unit-color:       var(--color-accent);
   --unit-color-light: var(--color-accent-light);
 
+  --blank-correct:      #2d6a4f;
+  --blank-correct-bg:   rgba(45,106,79,0.08);
+  --blank-incorrect:    #c0392b;
+  --blank-incorrect-bg: rgba(192,57,43,0.07);
+
   --font-sans:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   --font-display: 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
@@ -274,42 +279,55 @@ body {
   font-weight: 700; letter-spacing: 0.08em; margin-bottom: 0.45rem;
 }
 .q-text { font-size: 0.95rem; line-height: 2.0; margin-bottom: 0.4rem; }
-
-/* ══════════════════════════════════════
-   CLOZE WORD（トグル方式）
-══════════════════════════════════════ */
-.cloze-word {
-  display: inline-block;
-  padding: 1px 7px;
-  margin: 0 1px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  font-weight: 600;
-  user-select: none;
+.blank-wrapper {
+  display: inline-flex; align-items: center;
+  position: relative; vertical-align: middle; margin: 0 0.1em;
+}
+.blank {
+  display: inline-block; border: none;
+  border-bottom: 2px solid var(--unit-color, var(--color-accent));
+  background: transparent; font-family: inherit; font-size: inherit;
+  color: var(--unit-color, var(--color-accent));
+  text-align: center; outline: none; padding: 0 0.35em; min-width: 3em;
+  transition: border-color 0.18s, background 0.18s, color 0.18s;
   vertical-align: baseline;
 }
-
-.cloze-word.cloze-hidden {
-  background: var(--color-text-primary, #1a1a1a);
-  color: transparent;
-  border: 1.5px solid rgba(0,0,0,0.3);
+.blank:focus { border-bottom-color: var(--color-text-primary); background: rgba(0,0,0,0.03); }
+.blank.correct {
+  border-bottom-color: var(--blank-correct); color: var(--blank-correct);
+  background: var(--blank-correct-bg); border-radius: 3px 3px 0 0;
 }
-
-.cloze-word.cloze-hidden:hover {
-  background: #2d2d2d;
+.blank.incorrect {
+  border-bottom-color: var(--blank-incorrect); color: var(--blank-incorrect);
+  background: var(--blank-incorrect-bg); border-radius: 3px 3px 0 0;
+  animation: shake 0.28s ease;
 }
-
-.cloze-word.revealed {
-  background: var(--unit-color-light, var(--color-accent-light));
-  color: var(--color-text-primary);
-  border: 1.5px solid var(--unit-color, var(--color-accent));
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%     { transform: translateX(-4px); }
+  75%     { transform: translateX(4px); }
 }
-
-.cloze-word:active {
-  transform: scale(0.97);
+.hint-icon {
+  font-size: 0.62rem; color: var(--color-text-secondary); cursor: default;
+  margin-left: 2px; user-select: none; border-radius: 50%;
+  width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border); transition: color 0.13s;
 }
-
+.hint-icon:hover { color: var(--unit-color, var(--color-accent)); border-color: var(--unit-color, var(--color-accent)); }
+.q-feedback {
+  font-family: var(--font-mono); font-size: 0.78rem;
+  min-height: 1.2em; margin-top: 0.3rem; line-height: 1.6;
+}
+.q-feedback.fb-ok { color: var(--blank-correct); }
+.q-feedback.fb-ng { color: var(--blank-incorrect); }
+.quiz-controls {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 1.5rem; flex-wrap: wrap;
+}
+.quiz-score {
+  margin-left: auto; font-family: var(--font-mono); font-size: 0.82rem;
+  color: var(--unit-color, var(--color-accent)); font-weight: 600;
+}
 .quiz-kb-hint { font-size: 0.72rem; color: var(--color-text-secondary); margin-top: 1rem; letter-spacing: 0.03em; }
 
 /* ══════════════════════════════════════
