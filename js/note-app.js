@@ -89,7 +89,6 @@ function buildNav() {
   const titleBlock = `
     <div class="nav-title-block" id="navTitleBlock">
       <span class="nav-title-block__text">${escHtml(title)}</span>
-      <button class="nav-title-block__close" onclick="closeNav()" aria-label="閉じる">✕</button>
     </div>
   `;
 
