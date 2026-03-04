@@ -309,7 +309,13 @@ body {
 .cloze-word:active {
   transform: scale(0.97);
 }
-
+/* まとめタブでの重要語句ハイライト */
+.cloze-hint {
+  border-bottom: 2px solid var(--unit-color, var(--color-accent));
+  color: var(--unit-color, var(--color-accent));
+  font-weight: 600;
+  padding: 0 1px;
+}
 .quiz-kb-hint { font-size: 0.72rem; color: var(--color-text-secondary); margin-top: 1rem; letter-spacing: 0.03em; }
 
 /* ══════════════════════════════════════

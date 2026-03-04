@@ -190,7 +190,18 @@ async function loadSummary(unit) {
       md = await res.text();
       mdCache[unit.file] = md;
     }
-    mdBody.innerHTML = marked.parse(md);
+    //mdBody.innerHTML = marked.parse(md);
+    // ⟦⟦…⟧⟧ をプレースホルダ化してからmarked → ヒントスパンに戻す
+    const ph = [];
+    const escaped = md.replace(/⟦⟦([\s\S]*?)⟧⟧/g, (_, t) => {
+      ph.push(t);
+      return `CLZPH_${ph.length - 1}_END`;
+    });
+    let html = marked.parse(escaped);
+    html = html.replace(/CLZPH_(\d+)_END/g, (_, i) => {
+      return `<span class="cloze-hint">${escHtml(ph[+i])}</span>`;
+    });
+mdBody.innerHTML = html;
     updateUnitMeta(unit);
     loading.style.display = 'none';
     body.style.display    = 'block';
