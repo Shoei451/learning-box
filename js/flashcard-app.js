@@ -111,12 +111,20 @@ function initApp() {
                        document.getElementById('completeOverlay').style.display === 'none';
 
     if (inProgress && deck.length > 1) {
+      // transition 中なら強制キャンセル（setTimeout の遅延実行で deckIdx が上書きされるのを防ぐ）
+      isTransitioning = false;
+      const scene = document.getElementById('cardScene');
+      scene.className = scene.className
+        .replace(/\b(swap-out-left|swap-out-right|swap-in-left|swap-in-right|is-swapping)\b/g, '')
+        .trim();
       const currentCard = deck[deckIdx];
       if (shuffleOn) {
-        // 残りをシャッフルして現在カードの位置を維持
-        const rest = shuffle(deck.filter((_, i) => i !== deckIdx));
-        deck       = [...rest.slice(0, deckIdx), currentCard, ...rest.slice(deckIdx)];
-        // deckIdx はそのまま — 同じ位置に同じカードが来る
+        // 現在カードを除いた残りをシャッフルし、deckIdx の前後に配置
+        const rest    = shuffle(deck.filter((_, i) => i !== deckIdx));
+        const before  = rest.slice(0, deckIdx);           // 前に deckIdx 枚
+        const after   = rest.slice(deckIdx);              // 残りを後ろに
+        deck          = [...before, currentCard, ...after];
+        // deckIdx はそのまま
       } else {
         // シャッフル解除: 元の allCards 順に並び直して現在カードの位置を探す
         const defs   = getFilterDefs();
@@ -339,6 +347,7 @@ function transitionToCard(targetIdx, direction) {
 
   scene.classList.add(outClass);
   setTimeout(() => {
+    if (!isTransitioning) return;  // shuffle等でキャンセルされた場合はスキップ
     scene.classList.remove(outClass);
     deckIdx = targetIdx;
     renderCard();
