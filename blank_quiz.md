@@ -161,3 +161,57 @@ function convertBlanks(html) {
 - md直読み・Node.js ビルドの両方に対応  
 
 Markdown 編集体験と教材生成の自動化を両立するための、シンプルで堅牢な仕組みです。
+
+---
+## 追記 css案
+カラー等はlearning-box側のデザインに応じて変更の余地あり
+```css
+/* ===== Cloze Word (IMPROVED!) ===== */
+.cloze-word {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 1em;
+    user-select: none;
+    font-weight: 600;
+}
+
+.cloze-word.cloze-hidden {
+    background-color: var(--base02);
+    color: var(--base02); /* Same as background - text invisible but present */
+    text-shadow: none;
+    border: 2px solid var(--base01);
+    position: relative;
+}
+
+/* Show text length via invisible content */
+.cloze-word.cloze-hidden::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: var(--base0);
+    opacity: 0.3;
+}
+
+.cloze-word.revealed {
+    background-color: var(--yellow);
+    color: var(--base3);
+    border: 2px solid var(--yellow);
+}
+
+.cloze-word:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.cloze-word:active {
+    transform: scale(0.98);
+}
+```
