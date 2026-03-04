@@ -62,7 +62,7 @@ function applyMeta() {
   const title   = meta.title   || _slug;
   const subject = meta.subject || '';
 
-  document.title = `${title} Flashcards - 451 Learning box`;
+  document.title = `${title} — フラッシュカード`;
   document.getElementById('headerTitle').textContent  = title;
   document.getElementById('headerSub').textContent    = subject;
   document.getElementById('startTitle').textContent   = title;
@@ -111,22 +111,21 @@ function initApp() {
                        document.getElementById('completeOverlay').style.display === 'none';
 
     if (inProgress && deck.length > 1) {
+      const currentCard = deck[deckIdx];
       if (shuffleOn) {
-        // 現在のカードを先頭に保持しつつ残りをシャッフル
-        const current = deck[deckIdx];
-        const rest    = shuffle(deck.filter((_, i) => i !== deckIdx));
-        deck          = [current, ...rest];
-        deckIdx       = 0;
+        // 残りをシャッフルして現在カードの位置を維持
+        const rest = shuffle(deck.filter((_, i) => i !== deckIdx));
+        deck       = [...rest.slice(0, deckIdx), currentCard, ...rest.slice(deckIdx)];
+        // deckIdx はそのまま — 同じ位置に同じカードが来る
       } else {
-        // シャッフル解除: 元の allCards 順に並び直してから現在位置を探す
-        const currentCard = deck[deckIdx];
-        const defs        = getFilterDefs();
-        const filter      = defs.find(f => f.id === selectedFilterId) || defs[0];
-        let pool          = allCards.filter(filter.match);
+        // シャッフル解除: 元の allCards 順に並び直して現在カードの位置を探す
+        const defs   = getFilterDefs();
+        const filter = defs.find(f => f.id === selectedFilterId) || defs[0];
+        let pool     = allCards.filter(filter.match);
         if (selectedCount !== 'all') {
           pool = pool.slice(0, Math.min(Number(selectedCount), pool.length));
         }
-        deck   = pool;
+        deck    = pool;
         deckIdx = deck.findIndex(c => c.id === currentCard.id);
         if (deckIdx < 0) deckIdx = 0;
       }
