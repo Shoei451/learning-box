@@ -5,6 +5,28 @@ const DECK_META = {
   subject: '政治経済',
 };
 
+const CATEGORY_STYLES = {
+  "日本経済史":    { text: '#2563eb', bg: '#eff6ff', card: '#1d4ed8' },
+  "中小企業問題":     { text: '#0891b2', bg: '#ecfeff', card: '#0e7490' },
+  "農業問題":     { text: '#7c3aed', bg: '#f5f3ff', card: '#6d28d9' },
+  "消費者問題": { text: '#dc2626', bg: '#fef2f2', card: '#b91c1c' },
+  "経済諸問題":           { text: '#0f766e', bg: '#f0fdfa', card: '#0f766e' },
+    "財政":           { text: '#2d6a4f', bg: '#d8f3dc', card: '#2d6a4f' },
+    "労働問題":           { text: '#faba08', bg: '#fff7ed', card: '#d97706' },
+    "社会保障":           { text: '#ec9f2a', bg: '#fff4e6', card: '#ec9f2a' },
+};
+
+const FILTER_DEFS = [
+  { id: 'all',        label: 'すべて',         match: ()  => true },
+  { id: "日本経済史",    label: '日本経済史',           match: c => c.category === "日本経済史" },
+  { id: "農業問題",    label: '農業問題',     match: c => c.category === "農業問題" },
+  { id: "労働問題",      label: '労働問題',     match: c => c.category === "労働問題" },
+  { id: "消費者問題", label: '消費者問題', match: c => c.category === "消費者問題" },
+  { id: "経済諸問題",      label: '経済諸問題',           match: c => c.category === "経済諸問題" },
+  { id: "中小企業問題",      label: '中小企業問題',           match: c => c.category === "中小企業問題" },
+  { id: "財政",      label: '財政',           match: c => c.category === "財政" },
+  { id: "社会保障",      label: '社会保障',           match: c => c.category === "社会保障" },
+];
 
 const CARDS = [
   // 日本経済史
