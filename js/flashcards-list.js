@@ -36,7 +36,17 @@ const FLASHCARDS = [
     url:     'flashcard.html?slug=geo-3-exam',
     color:   '#d2dd32',
     updated: '2026-03-04',
-  }
+  },
+  { 
+    id:      'seikei-3-exam',
+    title:   '政治経済 3学期期末テスト対策',
+    subject: '政治経済',
+    tags:    ['期末対策', '日本経済史', '中小企業問題', '農業問題', '消費者問題', '経済諸問題', '財政', '労働問題', '社会保障'],
+    count:   55,
+    url:     'flashcard.html?slug=seikei-3-exam',
+    color:   '#ec9f2a',
+    updated: '2026-03-05',
+  },
 
   // ── テンプレート（コピーして使う）────────────
   // {
