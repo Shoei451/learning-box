@@ -65,4 +65,11 @@ const UNITS_DATA = [
     file:  'notes/home-2-exam/08.md',
     color: '#c2410c',
   },
+  {
+    id:    'u09',
+    num:   '09',
+    title: '食品の保存と衛生',
+    file:  'notes/home-2-exam/09.md',
+    color: '#2944bea4',
+  },
 ];
