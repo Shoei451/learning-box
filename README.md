@@ -98,6 +98,9 @@ const UNITS_DATA = [
 
 まとめタブでは語句がハイライト表示され、穴埋めタブではクリックするまで非表示になる。
 
+穴埋め生成用のツールは別のレポジトリにある
+[cloze-builder](https://451-docs.netlify.app/toolbox/cloze-builder)
+
 ## 現在のコンテンツ
 
 | 教科 | セット名 |
