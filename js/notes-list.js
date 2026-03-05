@@ -34,6 +34,15 @@ const NOTES = [
     color:   '#5b6abf',
     updated: '2026-03-04',
   },
+  {
+    id:      'geo-3-exam',
+    title:   '地理総合 言語・宗教・日本の自然環境・防災',
+    subject: '地理総合',
+    tags:    ['期末対策', '3学期', '言語・宗教', '日本の自然環境', '防災'],
+    url:     'note.html?slug=geo-3-exam',
+    color:   '#d2dd32',
+    updated: '2026-03-05',
+  }
 
 
   // ── テンプレート（コピーして使う）────────────
