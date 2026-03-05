@@ -178,41 +178,56 @@ function addCard(hint) {
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
-(function init() {
+(async function init() {
+  const fcList    = typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : [];
+  const notesList = typeof NOTES      !== 'undefined' ? NOTES      : [];
+
+  // count / units を実ファイルから自動取得
+  await Promise.all([
+    ...fcList.map(item =>
+      fetch(`flashcards/${item.id}.js`)
+        .then(r => r.text())
+        .then(src => { item.count = countArrayEntries(src, 'CARDS'); })
+        .catch(() => {}) // 失敗時は list.js の値をそのまま使う
+    ),
+    ...notesList.map(item =>
+      fetch(`notes/${item.id}/meta.js`)
+        .then(r => r.text())
+        .then(src => { item.units = countArrayEntries(src, 'UNITS_DATA'); })
+        .catch(() => {})
+    ),
+  ]);
+
   // Flashcards
   const fcGrid  = document.getElementById('fcGrid');
   const fcCount = document.getElementById('fcCount');
-  const fcList  = typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : [];
-
-  if (!fcList.length) {
-    fcGrid.innerHTML = emptyState('フラッシュカードがまだありません');
-  } else {
-    fcGrid.innerHTML =
-      fcList.map(item => renderToolCard(item, 'fc')).join('') +
-      addCard('flashcards-list.js に追記して追加');
-  }
+  fcGrid.innerHTML = fcList.length
+    ? fcList.map(item => renderToolCard(item, 'fc')).join('') + addCard('Coming soon...')
+    : emptyState('フラッシュカードがまだありません');
   fcCount.textContent = fcList.length ? `(${fcList.length})` : '';
 
   // Notes
   const notesGrid  = document.getElementById('notesGrid');
   const notesCount = document.getElementById('notesCount');
-  const notesList  = typeof NOTES !== 'undefined' ? NOTES : [];
-
-  if (!notesList.length) {
-    notesGrid.innerHTML = emptyState('まとめノートがまだありません');
-  } else {
-    notesGrid.innerHTML =
-      notesList.map(item => renderToolCard(item, 'note')).join('') +
-      addCard('notes-list.js に追記して追加');
-  }
+  notesGrid.innerHTML = notesList.length
+    ? notesList.map(item => renderToolCard(item, 'note')).join('') + addCard('Coming soon...')
+    : emptyState('まとめノートがまだありません');
   notesCount.textContent = notesList.length ? `(${notesList.length})` : '';
 
   // Hero stats & navbar count
   document.getElementById('heroFlashCount').textContent = fcList.length;
   document.getElementById('heroNotesCount').textContent = notesList.length;
-  document.getElementById('totalCount').textContent =
-    `${fcList.length + notesList.length} tools`;
+  document.getElementById('totalCount').textContent = `${fcList.length + notesList.length} tools`;
 })();
+
+// JS ソース中の配列エントリ数を { で数える
+function countArrayEntries(src, varName) {
+  // "const CARDS = [" 以降の部分だけ切り出す
+  const match = src.match(new RegExp(`(?:const|var|let)\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
+  if (!match) return 0;
+  // category: や q: を持つオブジェクト = { ... } の数を数える
+  return (match[1].match(/\{/g) || []).length;
+}
 </script>
 </body>
 </html>
