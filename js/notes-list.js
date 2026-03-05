@@ -42,7 +42,16 @@ const NOTES = [
     url:     'note.html?slug=geo-3-exam',
     color:   '#d2dd32',
     updated: '2026-03-05',
-  }
+  },
+  {
+    id:       'postwar-africa-history',
+    title:    '世界史 アフリカ諸国の独立',
+    subject:  '世界史探究',
+    tags:     ['アフリカ', '独立', '植民地', '紛争', '南北問題'],
+    url:      'note.html?slug=postwar-africa-history',
+    color:    '#5bf016d5',
+    updated:  '2026-03-05',
+  },
 
 
   // ── テンプレート（コピーして使う）────────────

@@ -43,6 +43,15 @@ const FLASHCARDS = [
     color:   '#ec9f2a',
     updated: '2026-03-05',
   },
+  {
+    id:      'postwar-africa-history',
+    title:   '世界史 アフリカ諸国の独立',
+    subject: '世界史探究',
+    tags:    ['アフリカ', '独立', '植民地', '紛争', '南北問題'],
+    url:     'flashcard.html?slug=postwar-africa-history',
+    color:   '#5bf016d5',
+    updated: '2026-03-05',
+  },
 
   // ── テンプレート（コピーして使う）────────────
   // {
