@@ -13,6 +13,17 @@ const CATEGORY_STYLES = {
   nanboku:    { text:'#1d4ed8', bg:'#eff6ff', card:'#1d4ed8' },
 };
 
+const FILTER_DEFS = [
+  { id: 'all',        label: 'すべて',         match: ()  => true },
+  //{ id: 'example',    label: '例',           match: c => c.category === 'example' },
+  { id: 'bunkatsu',   label: '植民地・分割',   match: c => c.category === 'bunkatsu' },
+  { id: 'kita',       label: '北アフリカ',     match: c => c.category === 'kita' },
+  { id: 'black',      label: 'ブラックアフリカ', match: c => c.category === 'black' },
+  { id: 'funsou',     label: '独立後の紛争',   match: c => c.category === 'funsou' },
+  { id: 'portugal',   label: 'ポルトガル植民地', match: c => c.category === 'portugal' },
+  { id: 'nanboku',    label: '南北問題',       match: c => c.category === 'nanboku' },
+];
+
 const CARDS = [
 
   // ── 植民地支配・アフリカ分割 ────────────────

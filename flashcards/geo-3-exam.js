@@ -17,6 +17,17 @@ const CATEGORY_STYLES = {
   disaster:  { text:'#65a30d', bg:'#f7fee7', card:'#65a30d' },
 };
 
+const FILTER_DEFS = [
+  { id: 'all',        label: 'すべて',         match: ()  => true },
+  //{ id: 'example',    label: '例',           match: c => c.category === 'example' },
+  { id: 'canada',    label: 'カナダ',       match: c => c.category === 'canada' },
+  { id: 'religion',  label: '宗教・食生活', match: c => c.category === 'religion' },
+  { id: 'islam',     label: 'イスラーム',   match: c => c.category === 'islam' },
+  { id: 'palestine', label: 'パレスチナ',   match: c => c.category === 'palestine' },
+  { id: 'geography', label: '自然環境',     match: c => c.category === 'geography' },
+  { id: 'disaster',  label: '防災',         match: c => c.category === 'disaster' },
+];
+
 // ─────────────────────────────────────────────
 //      フィールド:
 //       category  : カテゴリ名（文字列）
