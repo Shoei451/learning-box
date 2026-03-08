@@ -15,7 +15,6 @@ let isFlipped       = false;
 let isTransitioning = false;
 let mastery         = {};
 let listOpen        = false;
-let shuffleOn       = false;
 let selectedFilterId = 'all';
 let selectedCount    = '20';
 
@@ -101,50 +100,6 @@ function initApp() {
   // ── シャッフルボタン ──
   // 学習開始前: 次回デッキに反映
   // 学習中    : 現在のデッキを即シャッフル（インデックスは0にリセット）
-  document.getElementById('shuffleBtn').addEventListener('click', () => {
-    shuffleOn = !shuffleOn;
-    document.getElementById('shuffleBtn').classList.toggle('active', shuffleOn);
-    document.getElementById('shuffleLabel').textContent = shuffleOn ? 'on' : 'shuffle';
-
-    // startOverlay が非表示 = 学習進行中
-    const inProgress = document.getElementById('startOverlay').classList.contains('hidden') &&
-                       document.getElementById('completeOverlay').style.display === 'none';
-
-    if (inProgress && deck.length > 1) {
-      // transition 中なら強制キャンセル（setTimeout の遅延実行で deckIdx が上書きされるのを防ぐ）
-      isTransitioning = false;
-      const scene = document.getElementById('cardScene');
-      scene.className = scene.className
-        .replace(/\b(swap-out-left|swap-out-right|swap-in-left|swap-in-right|is-swapping)\b/g, '')
-        .trim();
-      const currentCard = deck[deckIdx];
-      if (shuffleOn) {
-        // 現在カードを除いた残りをシャッフルし、deckIdx の前後に配置
-        const rest    = shuffle(deck.filter((_, i) => i !== deckIdx));
-        const before  = rest.slice(0, deckIdx);           // 前に deckIdx 枚
-        const after   = rest.slice(deckIdx);              // 残りを後ろに
-        deck          = [...before, currentCard, ...after];
-        // deckIdx はそのまま
-      } else {
-        // シャッフル解除: 元の allCards 順に並び直して現在カードの位置を探す
-        const defs   = getFilterDefs();
-        const filter = defs.find(f => f.id === selectedFilterId) || defs[0];
-        let pool     = allCards.filter(filter.match);
-        if (selectedCount !== 'all') {
-          pool = pool.slice(0, Math.min(Number(selectedCount), pool.length));
-        }
-        deck    = pool;
-        deckIdx = deck.findIndex(c => c.id === currentCard.id);
-        if (deckIdx < 0) deckIdx = 0;
-      }
-      renderCard();
-      renderDots();
-      renderList();
-      showToast(shuffleOn ? 'シャッフル: ON（デッキを再構成）' : 'シャッフル: OFF（元の順に戻しました）');
-    } else {
-      showToast(shuffleOn ? 'シャッフル: ON' : 'シャッフル: OFF');
-    }
-  });
 
   document.addEventListener('keydown', e => {
     if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
@@ -216,13 +171,11 @@ function openStartScreen() {
   mastery = {};
   document.getElementById('startOverlay').classList.remove('hidden');
   document.getElementById('completeOverlay').style.display = 'none';
-  document.getElementById('shuffleBtn').style.display = '';
   updateStartMeta();
 }
 
 function startStudy() {
   document.getElementById('startOverlay').classList.add('hidden');
-  document.getElementById('shuffleBtn').style.display = 'none';
   mastery = {};
   buildDeck();
 }
@@ -235,7 +188,7 @@ function buildDeck() {
   const filter = defs.find(f => f.id === selectedFilterId) || defs[0];
   let pool = allCards.filter(filter.match);
 
-  if (shuffleOn) pool = shuffle([...pool]);
+  pool = shuffle([...pool]);
   if (selectedCount !== 'all') {
     pool = pool.slice(0, Math.min(Number(selectedCount), pool.length));
   }
