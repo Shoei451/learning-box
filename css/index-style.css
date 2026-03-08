@@ -190,7 +190,7 @@
     .tool-card__subject {
       font-family: var(--font-mono); font-size: 0.65rem;
       letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--card-color, var(--color-accent));
+      color: #6b6b6b;
       background: color-mix(in srgb, var(--card-color, var(--color-accent)) 10%, white);
       padding: 0.15rem 0.55rem; border-radius: 100px;
       font-weight: 500;
