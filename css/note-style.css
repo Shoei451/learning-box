@@ -35,6 +35,10 @@
   --header-h:    52px;
   --nav-w:       200px;
   --content-max: 720px;
+
+  /* コンテンツ階層インデント */
+  --indent-h3: 1.1rem;
+  --indent-h4: 2rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -303,6 +307,108 @@ body {
 .markdown-body blockquote p { margin-bottom: 0; }
 
 .markdown-body hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
+
+/* ══════════════════════════════════════
+   MARKDOWN BODY — コンテンツ階層インデント
+   CSSの ~ セレクタ（general sibling）を利用。
+   h3/h4 以降の兄弟要素を字下げし、
+   より上位の見出しが来た時点でリセットする。
+══════════════════════════════════════ */
+
+/* h3 配下: p / ul / ol / table / blockquote / pre を indent-h3 分字下げ */
+.markdown-body h3 ~ p,
+.markdown-body h3 ~ ul,
+.markdown-body h3 ~ ol,
+.markdown-body h3 ~ table,
+.markdown-body h3 ~ blockquote,
+.markdown-body h3 ~ pre {
+  padding-left: var(--indent-h3);
+}
+
+/* h4 配下: さらに indent-h4 まで字下げ（h4 は h3 の中に来る想定） */
+.markdown-body h4 ~ p,
+.markdown-body h4 ~ ul,
+.markdown-body h4 ~ ol,
+.markdown-body h4 ~ table,
+.markdown-body h4 ~ blockquote,
+.markdown-body h4 ~ pre {
+  padding-left: var(--indent-h4);
+}
+
+/* h2 が来たらインデントをリセット */
+.markdown-body h2 ~ p,
+.markdown-body h2 ~ ul,
+.markdown-body h2 ~ ol,
+.markdown-body h2 ~ table,
+.markdown-body h2 ~ blockquote,
+.markdown-body h2 ~ pre {
+  padding-left: 0;
+}
+
+/* h2 → h3 → h4 の順で来たとき、h4 配下は indent-h4 を維持 */
+.markdown-body h2 ~ h3 ~ p,
+.markdown-body h2 ~ h3 ~ ul,
+.markdown-body h2 ~ h3 ~ ol,
+.markdown-body h2 ~ h3 ~ table,
+.markdown-body h2 ~ h3 ~ blockquote,
+.markdown-body h2 ~ h3 ~ pre {
+  padding-left: var(--indent-h3);
+}
+
+.markdown-body h2 ~ h4 ~ p,
+.markdown-body h2 ~ h4 ~ ul,
+.markdown-body h2 ~ h4 ~ ol,
+.markdown-body h2 ~ h4 ~ table,
+.markdown-body h2 ~ h4 ~ blockquote,
+.markdown-body h2 ~ h4 ~ pre {
+  padding-left: var(--indent-h4);
+}
+
+/* quiz-wrap にも同じインデントルールを適用 */
+.quiz-wrap h3 ~ p,
+.quiz-wrap h3 ~ ul,
+.quiz-wrap h3 ~ ol,
+.quiz-wrap h3 ~ table,
+.quiz-wrap h3 ~ blockquote,
+.quiz-wrap h3 ~ pre {
+  padding-left: var(--indent-h3);
+}
+
+.quiz-wrap h4 ~ p,
+.quiz-wrap h4 ~ ul,
+.quiz-wrap h4 ~ ol,
+.quiz-wrap h4 ~ table,
+.quiz-wrap h4 ~ blockquote,
+.quiz-wrap h4 ~ pre {
+  padding-left: var(--indent-h4);
+}
+
+.quiz-wrap h2 ~ p,
+.quiz-wrap h2 ~ ul,
+.quiz-wrap h2 ~ ol,
+.quiz-wrap h2 ~ table,
+.quiz-wrap h2 ~ blockquote,
+.quiz-wrap h2 ~ pre {
+  padding-left: 0;
+}
+
+.quiz-wrap h2 ~ h3 ~ p,
+.quiz-wrap h2 ~ h3 ~ ul,
+.quiz-wrap h2 ~ h3 ~ ol,
+.quiz-wrap h2 ~ h3 ~ table,
+.quiz-wrap h2 ~ h3 ~ blockquote,
+.quiz-wrap h2 ~ h3 ~ pre {
+  padding-left: var(--indent-h3);
+}
+
+.quiz-wrap h2 ~ h4 ~ p,
+.quiz-wrap h2 ~ h4 ~ ul,
+.quiz-wrap h2 ~ h4 ~ ol,
+.quiz-wrap h2 ~ h4 ~ table,
+.quiz-wrap h2 ~ h4 ~ blockquote,
+.quiz-wrap h2 ~ h4 ~ pre {
+  padding-left: var(--indent-h4);
+}
 
 /* ══════════════════════════════════════
    QUIZ
