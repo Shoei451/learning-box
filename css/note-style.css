@@ -1,8 +1,14 @@
 /* ══════════════════════════════════════
-   note-style.css — v3
-   - header-title をモバイルでは unit-nav 上部に表示
-   - header-title--desktop: デスクトップのみ
-   - nav-title-block: モバイルのみ (unit-nav 内)
+   note-style.css — v4
+   - v3からの変更点（可読性・完成度改善）:
+     - .markdown-body: font-size 0.92rem→1rem, line-height 1.85→1.9
+     - h2: font-mono+uppercase廃止 → font-display + 2px下線
+     - h3: 1rem→1.05rem + border-left アクセント
+     - h4: text-transform:uppercase 削除
+     - p/li: margin-bottom 拡大
+     - table: font-size・padding 拡大
+     - blockquote: font-size 0.88rem→0.95rem
+     - .quiz-wrap: markdown-body と同等に統一
    ══════════════════════════════════════ */
 
 :root {
@@ -192,51 +198,111 @@ body {
 .unit-progress { font-size: 0.78rem; color: var(--color-text-secondary); margin-top: 0.2rem; }
 
 /* ══════════════════════════════════════
-   MARKDOWN BODY
+   MARKDOWN BODY  ← v4 改善箇所
 ══════════════════════════════════════ */
-.markdown-body { font-size: 0.92rem; line-height: 1.85; }
+
+/* 本文: font-size 0.92rem → 1rem、行間 1.85 → 1.9 */
+.markdown-body {
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+/* h2: font-mono+uppercase廃止 → font-display + 2px unit-color下線
+   margin-top も 2rem → 2.75rem に広げてセクション感を出す */
 .markdown-body h2 {
-  font-family: var(--font-mono); font-size: 1.50rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: #6b6b6b;
-  margin-top: 2rem; margin-bottom: 0.75rem;
-  padding-bottom: 0.35rem; border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-text-primary);
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--unit-color, var(--color-accent));
 }
+
+/* h3: 1rem → 1.05rem + border-left アクセントで h2 と明確に区別 */
 .markdown-body h3 {
-  font-family: var(--font-display); font-size: 1rem; font-weight: 700;
-  margin-top: 1.5rem; margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 1.75rem;
+  margin-bottom: 0.45rem;
+  padding-left: 0.65rem;
+  border-left: 3px solid var(--unit-color, var(--color-accent));
 }
+
+/* h4: text-transform:uppercase 削除（日本語に無効 + 見た目が崩れる） */
 .markdown-body h4 {
-  font-size: 0.88rem; font-weight: 600; color: var(--color-text-secondary);
-  margin-top: 1rem; margin-bottom: 0.3rem;
-  text-transform: uppercase; letter-spacing: 0.06em;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin-top: 1.25rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.04em;
 }
-.markdown-body p  { margin-bottom: 0.75rem; }
+
+/* 段落: 0.75rem → 1rem でノートらしい呼吸感 */
+.markdown-body p  { margin-bottom: 1rem; }
+
 .markdown-body ul,
-.markdown-body ol { padding-left: 1.4rem; margin-bottom: 0.75rem; }
-.markdown-body li { margin-bottom: 0.2rem; }
+.markdown-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+
+/* リスト行間: 0.2rem → 0.4rem */
+.markdown-body li { margin-bottom: 0.4rem; }
+
 .markdown-body strong { font-weight: 700; }
 .markdown-body em     { font-style: italic; }
+
 .markdown-body code {
   font-family: var(--font-mono); font-size: 0.85em;
   background: var(--color-accent-light); color: var(--color-accent);
   padding: 0.1em 0.4em; border-radius: 4px;
 }
-.markdown-body table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+
+.markdown-body pre {
+  background: #f5f5f2;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+.markdown-body pre code {
+  background: none; color: var(--color-text-primary);
+  padding: 0; font-size: 0.82rem; line-height: 1.6;
+}
+
+/* テーブル: font-size 0.85rem → 0.9rem、padding 拡大 */
+.markdown-body table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.9rem; margin-bottom: 1.25rem;
+}
 .markdown-body th {
   background: var(--color-bg); border: 1px solid var(--color-border);
-  padding: 0.45rem 0.75rem; text-align: left; font-weight: 600; color: var(--color-text-secondary);
+  padding: 0.55rem 0.9rem; text-align: left;
+  font-weight: 600; font-size: 0.82rem;
+  color: var(--color-text-secondary); letter-spacing: 0.03em;
 }
-.markdown-body td { border: 1px solid var(--color-border); padding: 0.45rem 0.75rem; }
+.markdown-body td {
+  border: 1px solid var(--color-border);
+  padding: 0.55rem 0.9rem;
+  line-height: 1.65;
+}
 .markdown-body tr:hover td { background: var(--color-bg); }
+
+/* blockquote: font-size 0.88rem → 0.95rem */
 .markdown-body blockquote {
   border-left: 4px solid var(--unit-color, var(--color-accent));
   background: var(--unit-color-light, var(--color-accent-light));
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 0.75rem 1rem; margin-bottom: 0.75rem;
-  font-size: 0.88rem; color: var(--color-text-primary);
+  padding: 0.8rem 1.1rem; margin-bottom: 1rem;
+  font-size: 0.95rem; color: var(--color-text-primary);
 }
 .markdown-body blockquote p { margin-bottom: 0; }
-.markdown-body hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
+
+.markdown-body hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
 
 /* ══════════════════════════════════════
    QUIZ
@@ -259,6 +325,8 @@ body {
   background: var(--unit-color, var(--color-accent));
   border-radius: 100px; transition: width 0.35s ease;
 }
+
+/* .quiz-wrap: markdown-body と同等のタイポグラフィに統一 */
 .quiz-wrap  { display: flex; flex-direction: column; gap: 1.1rem; }
 .quiz-empty { font-size: 0.88rem; color: var(--color-text-secondary); padding: 2rem 0; }
 .q-item {
@@ -275,6 +343,88 @@ body {
 }
 .q-text { font-size: 0.95rem; line-height: 2.0; margin-bottom: 0.4rem; }
 
+/* 穴埋めタブ本文 — .markdown-body と同等のレンダリング */
+.quiz-wrap { font-size: 1rem; line-height: 1.9; }
+
+.quiz-wrap h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-text-primary);
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--unit-color, var(--color-accent));
+}
+.quiz-wrap h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 1.75rem;
+  margin-bottom: 0.45rem;
+  padding-left: 0.65rem;
+  border-left: 3px solid var(--unit-color, var(--color-accent));
+}
+.quiz-wrap h4 {
+  font-size: 0.9rem; font-weight: 700; color: var(--color-text-secondary);
+  margin-top: 1.25rem; margin-bottom: 0.3rem; letter-spacing: 0.04em;
+}
+.quiz-wrap p  { margin-bottom: 1rem; }
+.quiz-wrap ul,
+.quiz-wrap ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+.quiz-wrap li { margin-bottom: 0.4rem; }
+.quiz-wrap strong { font-weight: 700; }
+.quiz-wrap em     { font-style: italic; }
+.quiz-wrap code {
+  font-family: var(--font-mono); font-size: 0.85em;
+  background: var(--color-accent-light); color: var(--color-accent);
+  padding: 0.1em 0.4em; border-radius: 4px;
+}
+.quiz-wrap pre {
+  background: #f5f5f2; border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 1rem 1.25rem;
+  overflow-x: auto; margin-bottom: 1.25rem;
+}
+.quiz-wrap pre code {
+  background: none; color: var(--color-text-primary);
+  padding: 0; font-size: 0.82rem; line-height: 1.6;
+}
+.quiz-wrap table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.9rem; margin-bottom: 1.25rem;
+}
+.quiz-wrap th {
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  padding: 0.55rem 0.9rem; text-align: left;
+  font-weight: 600; font-size: 0.82rem;
+  color: var(--color-text-secondary); letter-spacing: 0.03em;
+}
+.quiz-wrap td {
+  border: 1px solid var(--color-border);
+  padding: 0.55rem 0.9rem; line-height: 1.65;
+}
+.quiz-wrap tr:hover td { background: var(--color-bg); }
+.quiz-wrap blockquote {
+  border-left: 4px solid var(--unit-color, var(--color-accent));
+  background: var(--unit-color-light, var(--color-accent-light));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.8rem 1.1rem; margin-bottom: 1rem;
+  font-size: 0.95rem; color: var(--color-text-primary);
+}
+.quiz-wrap blockquote p { margin-bottom: 0; }
+.quiz-wrap hr { border: none; border-top: 1px solid var(--color-border); margin: 2rem 0; }
+
+/* ══════════════════════════════════════
+   QUIZ CONTROLS
+══════════════════════════════════════ */
+.quiz-controls {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-top: 2rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
 /* ══════════════════════════════════════
    CLOZE WORD（トグル方式）
 ══════════════════════════════════════ */
@@ -289,26 +439,19 @@ body {
   user-select: none;
   vertical-align: baseline;
 }
-
 .cloze-word.cloze-hidden {
   background: var(--color-text-primary, #1a1a1a);
   color: transparent;
   border: 1.5px solid rgba(0,0,0,0.3);
 }
-
-.cloze-word.cloze-hidden:hover {
-  background: #2d2d2d;
-}
-
+.cloze-word.cloze-hidden:hover { background: #2d2d2d; }
 .cloze-word.revealed {
   background: var(--unit-color-light, var(--color-accent-light));
   color: var(--color-text-primary);
   border: 1.5px solid var(--unit-color, var(--color-accent));
 }
+.cloze-word:active { transform: scale(0.97); }
 
-.cloze-word:active {
-  transform: scale(0.97);
-}
 /* まとめタブでの重要語句ハイライト */
 .cloze-hint {
   border-bottom: 2px solid var(--unit-color, var(--color-accent));
@@ -385,21 +528,19 @@ body.nav-open .nav-overlay { opacity: 1; pointer-events: auto; }
     top: 0; width: min(300px, 80vw);
     transform: translateX(-100%); transition: transform 0.3s ease;
     z-index: 150;
-    padding-top: 0; /* nav-title-block が先頭に来るので padding 不要 */
+    padding-top: 0;
     box-shadow: 4px 0 40px rgba(0,0,0,0.15);
   }
   body.nav-open .unit-nav { transform: translateX(0); }
 
-  /* ── nav-title-block: モバイルのみ表示 ── */
+  /* nav-title-block: モバイルのみ表示 */
   .nav-title-block {
     display: flex;
     align-items: center; justify-content: space-between; gap: 0.5rem;
-    /* header の高さ分だけ下げて、固定ヘッダーの下に来るように */
     padding: calc(var(--header-h) + 0.75rem) 0.75rem 0.75rem;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 0.5rem;
     background: var(--color-surface);
-    /* スクロール時にタイトルが見えなくならないよう sticky */
     position: sticky; top: 0; z-index: 1;
   }
   .nav-title-block__text {
@@ -408,27 +549,23 @@ body.nav-open .nav-overlay { opacity: 1; pointer-events: auto; }
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     flex: 1; min-width: 0;
   }
-    .nav-title-block__close {
+  .nav-title-block__close {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; border-radius: 50%;
     border: 1px solid var(--color-border); background: var(--color-bg);
     color: var(--color-text-secondary); font-size: 1rem;
     cursor: pointer; flex-shrink: 0; transition: all 0.15s;
-
   }
   .nav-title-block__close:hover {
     border-color: var(--color-accent); color: var(--color-accent);
     background: var(--color-accent-light);
   }
 
-  /* デスクトップ用タイトル・サブテキストを非表示 */
   .header-title--desktop { display: none; }
   .header-sub            { display: none; }
 
   .main { margin-left: 0; padding-left: 1rem; padding-right: 1rem; padding-bottom: 4rem; }
 
-  /* nav-toggle (position:fixed) と header-back が重ならないよう header-left にスペースを確保
-     header-inner のデフォルト padding-left:1rem はそのまま。header-left だけ押す */
   .header-left { margin-left: 5.5rem; }
 }
 
@@ -438,93 +575,3 @@ body.nav-open .nav-overlay { opacity: 1; pointer-events: auto; }
   .quiz-controls { gap: 0.4rem; }
   .header-back { font-size: 0.68rem; padding: 0.3rem 0.55rem; }
 }
-
-/* ---
-  追加スタイルはここに  2026-03-04
---- */
-/* ══════════════════════════════════════
-   .markdown-body の補完
-   — pre / pre > code が未定義のため追加
-══════════════════════════════════════ */
-.markdown-body pre {
-  background: #f5f5f2;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-  overflow-x: auto;
-  margin-bottom: 1rem;
-}
-.markdown-body pre code {
-  background: none;
-  color: var(--color-text-primary);
-  padding: 0;
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-/* ══════════════════════════════════════
-   QUIZ WRAP — MD レンダリング用スタイル
-   穴埋めタブは marked.parse() した生 HTML を
-   #quizWrap に直接注入するため、
-   .markdown-body と同等のタイポグラフィが必要
-══════════════════════════════════════ */
-.quiz-wrap { font-size: 0.92rem; line-height: 1.85; }
-
-.quiz-wrap h2 {
-  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--unit-color, var(--color-accent));
-  margin-top: 2rem; margin-bottom: 0.75rem;
-  padding-bottom: 0.35rem; border-bottom: 1px solid var(--color-border);
-}
-.quiz-wrap h3 {
-  font-family: var(--font-display); font-size: 1rem; font-weight: 700;
-  margin-top: 1.5rem; margin-bottom: 0.5rem;
-}
-.quiz-wrap h4 {
-  font-size: 0.88rem; font-weight: 600; color: var(--color-text-secondary);
-  margin-top: 1rem; margin-bottom: 0.3rem;
-  text-transform: uppercase; letter-spacing: 0.06em;
-}
-.quiz-wrap p  { margin-bottom: 0.75rem; }
-.quiz-wrap ul,
-.quiz-wrap ol { padding-left: 1.4rem; margin-bottom: 0.75rem; }
-.quiz-wrap li { margin-bottom: 0.2rem; }
-.quiz-wrap strong { font-weight: 700; }
-.quiz-wrap em     { font-style: italic; }
-
-.quiz-wrap code {
-  font-family: var(--font-mono); font-size: 0.85em;
-  background: var(--color-accent-light); color: var(--color-accent);
-  padding: 0.1em 0.4em; border-radius: 4px;
-}
-.quiz-wrap pre {
-  background: #f5f5f2;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-  overflow-x: auto;
-  margin-bottom: 1rem;
-}
-.quiz-wrap pre code {
-  background: none; color: var(--color-text-primary);
-  padding: 0; font-size: 0.82rem; line-height: 1.6;
-}
-
-.quiz-wrap table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
-.quiz-wrap th {
-  background: var(--color-bg); border: 1px solid var(--color-border);
-  padding: 0.45rem 0.75rem; text-align: left;
-  font-weight: 600; color: var(--color-text-secondary);
-}
-.quiz-wrap td { border: 1px solid var(--color-border); padding: 0.45rem 0.75rem; }
-.quiz-wrap tr:hover td { background: var(--color-bg); }
-
-.quiz-wrap blockquote {
-  border-left: 4px solid var(--unit-color, var(--color-accent));
-  background: var(--unit-color-light, var(--color-accent-light));
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 0.75rem 1rem; margin-bottom: 0.75rem;
-  font-size: 0.88rem; color: var(--color-text-primary);
-}
-.quiz-wrap blockquote p { margin-bottom: 0; }
-.quiz-wrap hr { border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0; }
