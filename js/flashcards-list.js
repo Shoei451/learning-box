@@ -30,7 +30,7 @@ const FLASHCARDS = [
     title:   '保健 働く人・地域の健康',
     subject: '保健',
     tags:    ['第3章', '第4章', '労働', 'WLB', '保健行政', '医療制度', '国際保健', 'ヘルスプロモーション'],
-    url:     'flashcard.html?slug=hoken-2-exam',
+    url:     'flashcard.html?slug=healthcare-2-exam',
     color:   '#5b6abf',
     updated: '2026-03-08',
   },

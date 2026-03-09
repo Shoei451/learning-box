@@ -30,7 +30,7 @@ const NOTES = [
     title:   '保健 2学期まとめノート',
     subject: '保健',
     tags:    ['第3章', '第4章', '労働', '保健行政', '医療制度', '国際保健', 'ヘルスプロモーション'],
-    url:     'note.html?slug=hoken-2-exam',
+    url:     'note.html?slug=healthcare-2-exam',
     color:   '#5b6abf',
     updated: '2026-03-08',
   },
