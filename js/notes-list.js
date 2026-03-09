@@ -25,6 +25,16 @@ const NOTES = [
     color:   '#0891b2',
     updated: '2026-03-03',
   },
+  {
+    id:      'hoken-2-exam',
+    title:   '保健 2学期まとめノート',
+    subject: '保健',
+    tags:    ['第3章', '第4章', '労働', '保健行政', '医療制度', '国際保健', 'ヘルスプロモーション'],
+    url:     'note.html?slug=hoken-2-exam',
+    color:   '#5b6abf',
+    updated: '2026-03-08',
+  },
+
   { 
     id:      'healthcare-3-exam',
     title:   '保健 3学期まとめノート',
