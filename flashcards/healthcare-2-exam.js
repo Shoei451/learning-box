@@ -24,15 +24,15 @@ const CATEGORY_STYLES = {
 
 const FILTER_DEFS = [
   { id: 'all',           label: 'すべて',                    match: () => true },
-  { id: 'ch3_workplace', label: '第3章 職場の健康',          match: c => c.category === 'ch3_workplace' },
-  { id: 'ch3_mental',    label: '第3章 メンタルヘルス',      match: c => c.category === 'ch3_mental' },
-  { id: 'ch3_wlb',       label: '第3章 WLB・余暇',          match: c => c.category === 'ch3_wlb' },
-  { id: 'ch3_hazard',    label: '第3章 労働災害・職業病',    match: c => c.category === 'ch3_hazard' },
-  { id: 'ch3_law',       label: '第3章 法律・制度',          match: c => c.category === 'ch3_law' },
-  { id: 'ch4_global',    label: '第4章 国際保健',            match: c => c.category === 'ch4_global' },
-  { id: 'ch4_admin',     label: '第4章 保健行政',            match: c => c.category === 'ch4_admin' },
-  { id: 'ch4_medical',   label: '第4章 医療制度',            match: c => c.category === 'ch4_medical' },
-  { id: 'ch4_promo',     label: '第4章 ヘルスプロモーション', match: c => c.category === 'ch4_promo' },
+  { id: 'ch3_workplace', label: '職場の健康',          match: c => c.category === 'ch3_workplace' },
+  { id: 'ch3_mental',    label: 'メンタルヘルス',      match: c => c.category === 'ch3_mental' },
+  { id: 'ch3_wlb',       label: 'WLB・余暇',          match: c => c.category === 'ch3_wlb' },
+  { id: 'ch3_hazard',    label: '労働災害・職業病',    match: c => c.category === 'ch3_hazard' },
+  { id: 'ch3_law',       label: '法律・制度',          match: c => c.category === 'ch3_law' },
+  { id: 'ch4_global',    label: '国際保健',            match: c => c.category === 'ch4_global' },
+  { id: 'ch4_admin',     label: '保健行政',            match: c => c.category === 'ch4_admin' },
+  { id: 'ch4_medical',   label: '医療制度',            match: c => c.category === 'ch4_medical' },
+  { id: 'ch4_promo',     label: 'ヘルスプロモーション', match: c => c.category === 'ch4_promo' },
   { id: 'exam_trap',     label: '⚠ ひっかけ問題',         match: c => c.category === 'exam_trap' },
 ];
 
