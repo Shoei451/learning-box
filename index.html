@@ -1,142 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Study Tools — 451 learning box</title>
-  <link rel="icon" type="image/x-icon" href="images/451-lbox.svg">
-  <link rel="apple-touch-icon" type="image/png" href="images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/index-style.css">
-</head>
-<body>
-
-<!-- ══════════════════════════════════════
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Tools — 451 learning box</title>
+    <link rel="icon" type="image/x-icon" href="images/451-lbox.svg" />
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      href="images/apple-touch-icon.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/index-style.css" />
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════
      NAVBAR
 ══════════════════════════════════════ -->
-<nav class="navbar">
-  <div class="navbar__inner">
-    <a href="/" class="navbar__logo">
-      <span class="navbar__logo-mark">451</span>
-      Study Tools
-    </a>
-    <div class="navbar__right">
-      <ul class="navbar__section-links">
-        <li><a href="#flashcards">Flashcards</a></li>
-        <li><a href="#notes">Summary Notes</a></li>
-      </ul>
-      <span class="navbar__count" id="totalCount"></span>
-    </div>
-  </div>
-</nav>
+    <nav class="navbar">
+      <div class="navbar__inner">
+        <a href="/" class="navbar__logo">
+          <span class="navbar__logo-mark">451</span>
+          Study Tools
+        </a>
+        <div class="navbar__right">
+          <ul class="navbar__section-links">
+            <li><a href="#flashcards">Flashcards</a></li>
+            <li><a href="#notes">Summary Notes</a></li>
+          </ul>
+          <span class="navbar__count" id="totalCount"></span>
+        </div>
+      </div>
+    </nav>
 
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      HERO
 ══════════════════════════════════════ -->
-<div class="hero">
-  <div>
-    <p class="hero__eyebrow">Shoei451 · Study Tools</p>
-    <h1 class="hero__title">Study Tools</h1>
-    <p class="hero__sub">フラッシュカードとまとめノートをまとめて管理</p>
-  </div>
-  <div class="hero__stats">
-    <div class="hero__stat">
-      <strong id="heroFlashCount">—</strong>
-      flashcard sets
+    <div class="hero">
+      <div>
+        <p class="hero__eyebrow">Shoei451 · Study Tools</p>
+        <h1 class="hero__title">Study Tools</h1>
+        <p class="hero__sub">フラッシュカードとまとめノートをまとめて管理</p>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <strong id="heroFlashCount">—</strong>
+          flashcard sets
+        </div>
+        <div class="hero__stat">
+          <strong id="heroNotesCount">—</strong>
+          note sets
+        </div>
+      </div>
     </div>
-    <div class="hero__stat">
-      <strong id="heroNotesCount">—</strong>
-      note sets
-    </div>
-  </div>
-</div>
 
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      FLASHCARDS
 ══════════════════════════════════════ -->
-<section class="section" id="flashcards">
-  <div class="section-header">
-    <div class="section-header__left">
-      <h2 class="section-title">
-        フラッシュカード
-        <span class="section-title__en">Flashcards</span>
-      </h2>
-      <span class="section-count" id="fcCount"></span>
-    </div>
-  </div>
-  <div class="card-grid" id="fcGrid"></div>
-</section>
+    <section class="section" id="flashcards">
+      <div class="section-header">
+        <div class="section-header__left">
+          <h2 class="section-title">
+            フラッシュカード
+            <span class="section-title__en">Flashcards</span>
+          </h2>
+          <span class="section-count" id="fcCount"></span>
+        </div>
+      </div>
+      <div class="card-grid" id="fcGrid"></div>
+    </section>
 
-<hr class="divider">
+    <hr class="divider" />
 
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      NOTES
 ══════════════════════════════════════ -->
-<section class="section" id="notes">
-  <div class="section-header">
-    <div class="section-header__left">
-      <h2 class="section-title">
-        まとめノート
-        <span class="section-title__en">Summary Notes</span>
-      </h2>
-      <span class="section-count" id="notesCount"></span>
-    </div>
-  </div>
-  <div class="card-grid" id="notesGrid"></div>
-</section>
+    <section class="section" id="notes">
+      <div class="section-header">
+        <div class="section-header__left">
+          <h2 class="section-title">
+            まとめノート
+            <span class="section-title__en">Summary Notes</span>
+          </h2>
+          <span class="section-count" id="notesCount"></span>
+        </div>
+      </div>
+      <div class="card-grid" id="notesGrid"></div>
+    </section>
 
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      FOOTER
 ══════════════════════════════════════ -->
-<footer>
-  <p class="footer__left">© 2026 Shoei Okamoto · 451</p>
-  <h2 class ="footer__center">About This website</h2>
-  <p class="footer__center">テスト対策などのために個人的に作成した学習ツールです。参考になればよいと思います</p >
-  <ul class="footer__links">
-    <li><a href="https://shoei451.netlify.app" target="_blank">My main website</a></li>
-    <li><a href="https://451-docs.netlify.app" target="_blank">My docs</a></li>
-  </ul>
-</footer>
+    <footer>
+      <p class="footer__left">© 2026 Shoei Okamoto · 451</p>
+      <h2 class="footer__center">About This website</h2>
+      <p class="footer__center">
+        テスト対策などのために個人的に作成した学習ツールです。参考になればよいと思います
+      </p>
+      <ul class="footer__links">
+        <li>
+          <a href="https://shoei451.netlify.app" target="_blank"
+            >My main website</a
+          >
+        </li>
+        <li>
+          <a href="https://451-docs.netlify.app" target="_blank">My docs</a>
+        </li>
+      </ul>
+    </footer>
 
-<!-- ── data ── -->
-<script src="js/flashcards-list.js"></script>
-<script src="js/notes-list.js"></script>
+    <!-- ── data ── -->
+    <script src="js/flashcards-list.js"></script>
+    <script src="js/notes-list.js"></script>
 
-<script>
-// ══════════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════════
+    <script>
+      // ══════════════════════════════════════════════
+      // RENDER
+      // ══════════════════════════════════════════════
 
-// color-mix() の fallback 用にカラーを薄めるユーティリティ
-function hexToAlpha(hex, alpha) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
+      // color-mix() の fallback 用にカラーを薄めるユーティリティ
+      function hexToAlpha(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r},${g},${b},${alpha})`;
+      }
 
-// 日付フォーマット YYYY-MM-DD → M/D
-function fmtDate(str) {
-  if (!str) return '';
-  const [, m, d] = str.split('-');
-  return `${parseInt(m)}/${parseInt(d)}`;
-}
+      // 日付フォーマット YYYY-MM-DD → M/D
+      function fmtDate(str) {
+        if (!str) return "";
+        const [, m, d] = str.split("-");
+        return `${parseInt(m)}/${parseInt(d)}`;
+      }
 
-// ── ツールカード HTML ──
-function renderToolCard(item, type) {
-  const isFC    = type === 'fc';
-  const badge   = isFC
-    ? (item.count > 0 ? `<strong>${item.count}</strong> cards` : 'flashcards')
-    : (item.units > 0 ? `<strong>${item.units}</strong> units` : 'notes');
-  const tags    = (item.tags || []).map(t =>
-    `<span class="tool-card__tag">${t}</span>`
-  ).join('');
-  const updated = item.updated ? `<span class="tool-card__updated">${fmtDate(item.updated)}</span>` : '';
-  const color   = item.color || '#2d6a4f';
-  const bgAlpha = hexToAlpha(color, 0.09);
+      // ── ツールカード HTML ──
+      function renderToolCard(item, type) {
+        const isFC = type === "fc";
+        const badge = isFC
+          ? item.count > 0
+            ? `<strong>${item.count}</strong> cards`
+            : "flashcards"
+          : item.units > 0
+            ? `<strong>${item.units}</strong> units`
+            : "notes";
+        const tags = (item.tags || [])
+          .map((t) => `<span class="tool-card__tag">${t}</span>`)
+          .join("");
+        const updated = item.updated
+          ? `<span class="tool-card__updated">${fmtDate(item.updated)}</span>`
+          : "";
+        const color = item.color || "#2d6a4f";
+        const bgAlpha = hexToAlpha(color, 0.09);
 
-  return `
+        return `
     <a class="tool-card" href="${item.url}"
        style="--card-color:${color};">
       <div class="tool-card__bar"></div>
@@ -149,7 +169,7 @@ function renderToolCard(item, type) {
           ${updated}
         </div>
         <p class="tool-card__title">${item.title}</p>
-        ${tags ? `<div class="tool-card__tags">${tags}</div>` : ''}
+        ${tags ? `<div class="tool-card__tags">${tags}</div>` : ""}
       </div>
       <div class="tool-card__footer">
         <span class="tool-card__badge">${badge}</span>
@@ -157,77 +177,92 @@ function renderToolCard(item, type) {
       </div>
     </a>
   `;
-}
+      }
 
-// ── 空状態 ──
-function emptyState(msg) {
-  return `<div class="empty-state">
+      // ── 空状態 ──
+      function emptyState(msg) {
+        return `<div class="empty-state">
     <div class="empty-state__icon">📭</div>
     <p>${msg}</p>
   </div>`;
-}
+      }
 
-// ── 追加カード（ヒント）──
-function addCard(hint) {
-  return `<div class="add-card">
+      // ── 追加カード（ヒント）──
+      function addCard(hint) {
+        return `<div class="add-card">
     <span class="add-card__icon">＋</span>
     <span>${hint}</span>
   </div>`;
-}
+      }
 
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
-(async function init() {
-  const fcList    = typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : [];
-  const notesList = typeof NOTES      !== 'undefined' ? NOTES      : [];
+      // ══════════════════════════════════════════════
+      // INIT
+      // ══════════════════════════════════════════════
+      (async function init() {
+        const fcList = typeof FLASHCARDS !== "undefined" ? FLASHCARDS : [];
+        const notesList = typeof NOTES !== "undefined" ? NOTES : [];
 
-  // count / units を実ファイルから自動取得
-  await Promise.all([
-    ...fcList.map(item =>
-      fetch(`flashcards/${item.id}.js`)
-        .then(r => r.text())
-        .then(src => { item.count = countArrayEntries(src, 'CARDS'); })
-        .catch(() => {}) // 失敗時は list.js の値をそのまま使う
-    ),
-    ...notesList.map(item =>
-      fetch(`notes/${item.id}/meta.js`)
-        .then(r => r.text())
-        .then(src => { item.units = countArrayEntries(src, 'UNITS_DATA'); })
-        .catch(() => {})
-    ),
-  ]);
+        // count / units を実ファイルから自動取得
+        await Promise.all([
+          ...fcList.map(
+            (item) =>
+              fetch(`flashcards/${item.id}.js`)
+                .then((r) => r.text())
+                .then((src) => {
+                  item.count = countArrayEntries(src, "CARDS");
+                })
+                .catch(() => {}), // 失敗時は list.js の値をそのまま使う
+          ),
+          ...notesList.map((item) =>
+            fetch(`notes/${item.id}/meta.js`)
+              .then((r) => r.text())
+              .then((src) => {
+                item.units = countArrayEntries(src, "UNITS_DATA");
+              })
+              .catch(() => {}),
+          ),
+        ]);
 
-  // Flashcards
-  const fcGrid  = document.getElementById('fcGrid');
-  const fcCount = document.getElementById('fcCount');
-  fcGrid.innerHTML = fcList.length
-    ? fcList.map(item => renderToolCard(item, 'fc')).join('') + addCard('Coming soon...')
-    : emptyState('フラッシュカードがまだありません');
-  fcCount.textContent = fcList.length ? `(${fcList.length})` : '';
+        // Flashcards
+        const fcGrid = document.getElementById("fcGrid");
+        const fcCount = document.getElementById("fcCount");
+        fcGrid.innerHTML = fcList.length
+          ? fcList.map((item) => renderToolCard(item, "fc")).join("") +
+            addCard("Coming soon...")
+          : emptyState("フラッシュカードがまだありません");
+        fcCount.textContent = fcList.length ? `(${fcList.length})` : "";
 
-  // Notes
-  const notesGrid  = document.getElementById('notesGrid');
-  const notesCount = document.getElementById('notesCount');
-  notesGrid.innerHTML = notesList.length
-    ? notesList.map(item => renderToolCard(item, 'note')).join('') + addCard('Coming soon...')
-    : emptyState('まとめノートがまだありません');
-  notesCount.textContent = notesList.length ? `(${notesList.length})` : '';
+        // Notes
+        const notesGrid = document.getElementById("notesGrid");
+        const notesCount = document.getElementById("notesCount");
+        notesGrid.innerHTML = notesList.length
+          ? notesList.map((item) => renderToolCard(item, "note")).join("") +
+            addCard("Coming soon...")
+          : emptyState("まとめノートがまだありません");
+        notesCount.textContent = notesList.length
+          ? `(${notesList.length})`
+          : "";
 
-  // Hero stats & navbar count
-  document.getElementById('heroFlashCount').textContent = fcList.length;
-  document.getElementById('heroNotesCount').textContent = notesList.length;
-  document.getElementById('totalCount').textContent = `${fcList.length + notesList.length} tools`;
-})();
+        // Hero stats & navbar count
+        document.getElementById("heroFlashCount").textContent = fcList.length;
+        document.getElementById("heroNotesCount").textContent =
+          notesList.length;
+        document.getElementById("totalCount").textContent =
+          `${fcList.length + notesList.length} tools`;
+      })();
 
-// JS ソース中の配列エントリ数を { で数える
-function countArrayEntries(src, varName) {
-  // "const CARDS = [" 以降の部分だけ切り出す
-  const match = src.match(new RegExp(`(?:const|var|let)\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`));
-  if (!match) return 0;
-  // category: や q: を持つオブジェクト = { ... } の数を数える
-  return (match[1].match(/\{/g) || []).length;
-}
-</script>
-</body>
+      // JS ソース中の配列エントリ数を { で数える
+      function countArrayEntries(src, varName) {
+        // "const CARDS = [" 以降の部分だけ切り出す
+        const match = src.match(
+          new RegExp(
+            `(?:const|var|let)\\s+${varName}\\s*=\\s*\\[([\\s\\S]*?)\\];`,
+          ),
+        );
+        if (!match) return 0;
+        // category: や q: を持つオブジェクト = { ... } の数を数える
+        return (match[1].match(/\{/g) || []).length;
+      }
+    </script>
+  </body>
 </html>

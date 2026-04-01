@@ -1,37 +1,37 @@
 // notes/hoken-3-work/meta.js
 
 const NOTE_META = {
-  title:   '保健 2学期まとめノート',
-  subject: '保健',
+  title: "保健 2学期まとめノート",
+  subject: "保健",
 };
 
 const UNITS_DATA = [
   {
-    id:    'u03',
-    num:   '03',
-    title: '働く人の健康（第3章）',
-    file:  'notes/healthcare-2-exam/03.md',
-    color: '#0284c7',
+    id: "u03",
+    num: "03",
+    title: "働く人の健康（第3章）",
+    file: "notes/healthcare-2-exam/03.md",
+    color: "#0284c7",
   },
   {
-    id:    'u07',
-    num:   '07',
-    title: '保健制度とその活用',
-    file:  'notes/healthcare-2-exam/07.md',
-    color: '#2d6a4f',
+    id: "u07",
+    num: "07",
+    title: "保健制度とその活用",
+    file: "notes/healthcare-2-exam/07.md",
+    color: "#2d6a4f",
   },
   {
-    id:    'u08',
-    num:   '08',
-    title: '医療制度とその活用',
-    file:  'notes/healthcare-2-exam/08.md',
-    color: '#dc2626',
+    id: "u08",
+    num: "08",
+    title: "医療制度とその活用",
+    file: "notes/healthcare-2-exam/08.md",
+    color: "#dc2626",
   },
   {
-    id:    'u10',
-    num:   '10',
-    title: '様々な保健活動や対策',
-    file:  'notes/healthcare-2-exam/10.md',
-    color: '#7c3aed',
+    id: "u10",
+    num: "10",
+    title: "様々な保健活動や対策",
+    file: "notes/healthcare-2-exam/10.md",
+    color: "#7c3aed",
   },
 ];

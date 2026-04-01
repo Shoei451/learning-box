@@ -1,112 +1,130 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Summary Notes — 451 learning box</title>
-  <link rel="icon" type="image/x-icon" href="images/451-lbox.svg">
-  <link rel="apple-touch-icon" type="image/png" href="images/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-  <link rel="stylesheet" href="css/note-style.css">
-</head>
-<body>
-
-<!-- HEADER -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="header-left">
-      <a href="index.html" class="header-back">Back to Home</a>
-      <!-- デスクトップのみ表示。モバイルでは unit-nav 内に複製される -->
-      <span class="header-title header-title--desktop" id="headerTitle">まとめノート</span>
-      <span class="header-sub" id="headerSub"></span>
-    </div>
-    <div class="header-right">
-      <button class="tab-btn active" id="tabSummary" onclick="switchTab('summary')">まとめ</button>
-      <button class="tab-btn"        id="tabQuiz"    onclick="switchTab('quiz')">穴埋め</button>
-    </div>
-  </div>
-</header>
-
-<!-- slug読み込み中 -->
-<div class="slug-loading" id="slugLoading">
-  <div class="slug-spinner"></div>
-  <p>読み込み中…</p>
-</div>
-
-<!-- slug読み込みエラー -->
-<div class="slug-error" id="slugError" style="display:none">
-  <span class="slug-error-icon">⚠</span>
-  <p id="slugErrorMsg">Could not load the requested content.</p>
-  <a href="index.html" class="btn-ghost" style="margin-top:0.5rem">Back to Home</a>
-</div>
-
-<!-- UNIT NAV SIDEBAR（slug読み込み後に buildNav() で生成）-->
-<nav class="unit-nav" id="unitNav"></nav>
-
-<!-- MAIN -->
-<main class="main" id="main" style="display:none">
-
-  <div class="loading-state" id="loadingState">
-    <div class="loading-spinner"></div>
-    <p>Loading…</p>
-  </div>
-
-  <div class="error-state" id="errorState" style="display:none">
-    <p class="error-icon">⚠</p>
-    <p id="errorMsg">Could not load the requested file.</p>
-    <button class="btn-ghost" onclick="reloadUnit()" style="margin: auto;">Retry</button>
-  </div>
-
-  <!-- Summary tab -->
-  <div class="tab-panel" id="panelSummary" style="display:none">
-    <div class="unit-header">
-      <span class="unit-num"   id="unitNum"></span>
-      <div>
-        <h1 class="unit-title"    id="unitTitle"></h1>
-        <p  class="unit-progress" id="unitProgress"></p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summary Notes — 451 learning box</title>
+    <link rel="icon" type="image/x-icon" href="images/451-lbox.svg" />
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      href="images/apple-touch-icon.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <link rel="stylesheet" href="css/note-style.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="index.html" class="header-back">Back to Home</a>
+          <!-- デスクトップのみ表示。モバイルでは unit-nav 内に複製される -->
+          <span class="header-title header-title--desktop" id="headerTitle"
+            >まとめノート</span
+          >
+          <span class="header-sub" id="headerSub"></span>
+        </div>
+        <div class="header-right">
+          <button
+            class="tab-btn active"
+            id="tabSummary"
+            onclick="switchTab('summary')"
+          >
+            まとめ
+          </button>
+          <button class="tab-btn" id="tabQuiz" onclick="switchTab('quiz')">
+            穴埋め
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="markdown-body" id="markdownBody"></div>
-  </div>
+    </header>
 
-  <!-- Quiz tab -->
-  <div class="tab-panel" id="panelQuiz" style="display:none">
-    <div class="unit-header">
-      <span class="unit-num"  id="unitNumQ"></span>
-      <div>
-        <h1 class="unit-title" id="unitTitleQ"></h1>
+    <!-- slug読み込み中 -->
+    <div class="slug-loading" id="slugLoading">
+      <div class="slug-spinner"></div>
+      <p>読み込み中…</p>
+    </div>
+
+    <!-- slug読み込みエラー -->
+    <div class="slug-error" id="slugError" style="display: none">
+      <span class="slug-error-icon">⚠</span>
+      <p id="slugErrorMsg">Could not load the requested content.</p>
+      <a href="index.html" class="btn-ghost" style="margin-top: 0.5rem"
+        >Back to Home</a
+      >
+    </div>
+
+    <!-- UNIT NAV SIDEBAR（slug読み込み後に buildNav() で生成）-->
+    <nav class="unit-nav" id="unitNav"></nav>
+
+    <!-- MAIN -->
+    <main class="main" id="main" style="display: none">
+      <div class="loading-state" id="loadingState">
+        <div class="loading-spinner"></div>
+        <p>Loading…</p>
       </div>
-    </div>
-    <div class="quiz-header-row">
-      <div class="quiz-score-display">
-        <strong id="quizScoreBig">— / —</strong>
-        <span>表示済み</span>
+
+      <div class="error-state" id="errorState" style="display: none">
+        <p class="error-icon">⚠</p>
+        <p id="errorMsg">Could not load the requested file.</p>
+        <button class="btn-ghost" onclick="reloadUnit()" style="margin: auto">
+          Retry
+        </button>
       </div>
-    </div>
-    <div class="quiz-progress-bar">
-      <div class="quiz-progress-fill" id="quizProgressFill"></div>
-    </div>
-    <div class="quiz-wrap" id="quizWrap"></div>
-    <div class="quiz-controls">
-      <button class="btn-primary" onclick="revealAll()">全て表示</button>
-      <button class="btn-ghost"   onclick="hideAll()">全て隠す</button>
-      <button class="btn-ghost"   onclick="resetQuiz()">リセット</button>
-    </div>
-    <p class="quiz-kb-hint">語句をクリックして表示 / 再クリックで隠す</p>
-  </div>
 
-</main>
-<!-- MOBILE NAV -->
-<div class="nav-overlay" id="navOverlay"></div>
-<button class="nav-toggle" id="navToggle" aria-label="ナビを開く">
-  <span class="nav-toggle-icon">☰</span>
-  <span>Units</span>
-</button>
+      <!-- Summary tab -->
+      <div class="tab-panel" id="panelSummary" style="display: none">
+        <div class="unit-header">
+          <span class="unit-num" id="unitNum"></span>
+          <div>
+            <h1 class="unit-title" id="unitTitle"></h1>
+            <p class="unit-progress" id="unitProgress"></p>
+          </div>
+        </div>
+        <div class="markdown-body" id="markdownBody"></div>
+      </div>
 
-<div class="toast" id="toast"></div>
+      <!-- Quiz tab -->
+      <div class="tab-panel" id="panelQuiz" style="display: none">
+        <div class="unit-header">
+          <span class="unit-num" id="unitNumQ"></span>
+          <div>
+            <h1 class="unit-title" id="unitTitleQ"></h1>
+          </div>
+        </div>
+        <div class="quiz-header-row">
+          <div class="quiz-score-display">
+            <strong id="quizScoreBig">— / —</strong>
+            <span>表示済み</span>
+          </div>
+        </div>
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quizProgressFill"></div>
+        </div>
+        <div class="quiz-wrap" id="quizWrap"></div>
+        <div class="quiz-controls">
+          <button class="btn-primary" onclick="revealAll()">全て表示</button>
+          <button class="btn-ghost" onclick="hideAll()">全て隠す</button>
+          <button class="btn-ghost" onclick="resetQuiz()">リセット</button>
+        </div>
+        <p class="quiz-kb-hint">語句をクリックして表示 / 再クリックで隠す</p>
+      </div>
+    </main>
+    <!-- MOBILE NAV -->
+    <div class="nav-overlay" id="navOverlay"></div>
+    <button class="nav-toggle" id="navToggle" aria-label="ナビを開く">
+      <span class="nav-toggle-icon">☰</span>
+      <span>Units</span>
+    </button>
 
-<script src="js/note-app.js"></script>
-</body>
+    <div class="toast" id="toast"></div>
+
+    <script src="js/note-app.js"></script>
+  </body>
 </html>

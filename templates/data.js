@@ -13,17 +13,17 @@ const USE_SUPABASE = false;
 // [2] Supabase 接続設定（USE_SUPABASE = true のとき必要）
 // ─────────────────────────────────────────────
 
-const SUPABASE_URL       = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_KEY       = 'YOUR_ANON_KEY';
-const SUPABASE_TABLE_CAT = 'your_categories';  // key TEXT PK, label TEXT, sort INT
-const SUPABASE_TABLE_Q   = 'your_questions';   // id, category, question, answer, explanation, image_url
+const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+const SUPABASE_KEY = "YOUR_ANON_KEY";
+const SUPABASE_TABLE_CAT = "your_categories"; // key TEXT PK, label TEXT, sort INT
+const SUPABASE_TABLE_Q = "your_questions"; // id, category, question, answer, explanation, image_url
 
 // ─────────────────────────────────────────────
 // [3] デッキのメタ情報
 // ─────────────────────────────────────────────
 const DECK_META = {
-  title:   'フラッシュカード',   // スタート画面の大見出し・ヘッダー
-  subject: 'SUBJECT',           // スタート画面の英語サブタイトル
+  title: "フラッシュカード", // スタート画面の大見出し・ヘッダー
+  subject: "SUBJECT", // スタート画面の英語サブタイトル
 };
 
 // ─────────────────────────────────────────────
@@ -67,12 +67,12 @@ const DECK_META = {
 //     stone:   { text: '#44403c', bg: '#fafaf9', card: '#57534e' }
 // ─────────────────────────────────────────────
 const CATEGORY_STYLES = {
-  default: { text: '#2d6a4f', bg: '#e8f5e9', card: '#2d6a4f' },
+  default: { text: "#2d6a4f", bg: "#e8f5e9", card: "#2d6a4f" },
 
   // ── 使用するカテゴリの色をここに書く ──
-  cat_a: { text: '#1d4ed8', bg: '#eff6ff', card: '#1d4ed8' },  // 青
-  cat_b: { text: '#6d28d9', bg: '#f5f3ff', card: '#6d28d9' },  // 紫
-  cat_c: { text: '#0891b2', bg: '#ecfeff', card: '#0e7490' },  // シアン
+  cat_a: { text: "#1d4ed8", bg: "#eff6ff", card: "#1d4ed8" }, // 青
+  cat_b: { text: "#6d28d9", bg: "#f5f3ff", card: "#6d28d9" }, // 紫
+  cat_c: { text: "#0891b2", bg: "#ecfeff", card: "#0e7490" }, // シアン
 };
 
 // ─────────────────────────────────────────────
@@ -85,10 +85,10 @@ const CATEGORY_STYLES = {
 //     行をコメントアウトするとそのボタンが非表示になる。
 // ─────────────────────────────────────────────
 const FILTER_DEFS = [
-  { id: 'all',   label: 'すべて',     match: ()  => true },
-  { id: 'cat_a', label: 'カテゴリA',  match: c => c.category === 'cat_a' },
-  { id: 'cat_b', label: 'カテゴリB',  match: c => c.category === 'cat_b' },
-  { id: 'cat_c', label: 'カテゴリC',  match: c => c.category === 'cat_c' },
+  { id: "all", label: "すべて", match: () => true },
+  { id: "cat_a", label: "カテゴリA", match: (c) => c.category === "cat_a" },
+  { id: "cat_b", label: "カテゴリB", match: (c) => c.category === "cat_b" },
+  { id: "cat_c", label: "カテゴリC", match: (c) => c.category === "cat_c" },
 ];
 
 // ─────────────────────────────────────────────
@@ -102,16 +102,31 @@ const FILTER_DEFS = [
 // ─────────────────────────────────────────────
 const CARDS = [
   // ── カテゴリA ──
-  { category: 'cat_a', q: 'サンプル問題 A-1\nここに問題文を書く。', a: 'サンプル答え A-1', sub: '解説があればここに書く。' },
-  { category: 'cat_a', q: 'サンプル問題 A-2', a: 'サンプル答え A-2' },
-  { category: 'cat_a', q: 'サンプル問題 A-3', a: 'サンプル答え A-3' },
+  {
+    category: "cat_a",
+    q: "サンプル問題 A-1\nここに問題文を書く。",
+    a: "サンプル答え A-1",
+    sub: "解説があればここに書く。",
+  },
+  { category: "cat_a", q: "サンプル問題 A-2", a: "サンプル答え A-2" },
+  { category: "cat_a", q: "サンプル問題 A-3", a: "サンプル答え A-3" },
 
   // ── カテゴリB ──
-  { category: 'cat_b', q: 'サンプル問題 B-1', a: 'サンプル答え B-1', sub: '解説テキスト。' },
-  { category: 'cat_b', q: 'サンプル問題 B-2', a: 'サンプル答え B-2' },
-  { category: 'cat_b', q: 'サンプル問題 B-3', a: 'サンプル答え B-3' },
+  {
+    category: "cat_b",
+    q: "サンプル問題 B-1",
+    a: "サンプル答え B-1",
+    sub: "解説テキスト。",
+  },
+  { category: "cat_b", q: "サンプル問題 B-2", a: "サンプル答え B-2" },
+  { category: "cat_b", q: "サンプル問題 B-3", a: "サンプル答え B-3" },
 
   // ── カテゴリC ──
-  { category: 'cat_c', q: 'サンプル問題 C-1', a: 'サンプル答え C-1' },
-  { category: 'cat_c', q: 'サンプル問題 C-2', a: 'サンプル答え C-2', sub: '解説テキスト。' },
+  { category: "cat_c", q: "サンプル問題 C-1", a: "サンプル答え C-1" },
+  {
+    category: "cat_c",
+    q: "サンプル問題 C-2",
+    a: "サンプル答え C-2",
+    sub: "解説テキスト。",
+  },
 ];
